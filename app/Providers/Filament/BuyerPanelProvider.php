@@ -22,7 +22,9 @@ class BuyerPanelProvider extends PanelProvider
     {
         return $panel
             ->id('buyer')
-            ->path('buyer')
+            ->path('')
+            ->brandLogo(fn() => view('filament.app.logo'))
+            ->topNavigation()
             ->login()
             ->profile()
             ->registration()

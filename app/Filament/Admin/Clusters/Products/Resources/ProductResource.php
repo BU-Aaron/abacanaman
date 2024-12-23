@@ -190,6 +190,12 @@ class ProductResource extends Resource
                     ->sortable()
                     ->toggleable(),
 
+                Tables\Columns\TextColumn::make('user.name')
+                    ->label('Seller')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(),
+
                 Tables\Columns\IconColumn::make('is_visible')
                     ->label('Visibility')
                     ->sortable()
