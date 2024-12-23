@@ -41,8 +41,27 @@ class DatabaseSeeder extends Seeder
         $user = $this->withProgressBar(1, fn() => User::factory(1)->create([
             'name' => 'Demo User',
             'email' => 'admin@filamentphp.com',
+            'role' => User::ROLE_ADMIN,
         ]));
         $this->command->info('Admin user created.');
+
+        // Buyer
+        $this->command->warn(PHP_EOL . 'Creating buyer user...');
+        $user = $this->withProgressBar(1, fn() => User::factory(1)->create([
+            'name' => 'Buyer User',
+            'email' => 'buyer@filamentphp.com',
+            'role' => User::ROLE_BUYER,
+        ]));
+        $this->command->info('Buyer user created.');
+
+        // Seller
+        $this->command->warn(PHP_EOL . 'Creating seller user...');
+        $user = $this->withProgressBar(1, fn() => User::factory(1)->create([
+            'name' => 'Seller User',
+            'email' => 'seller@filamentphp.com',
+            'role' => User::ROLE_SELLER,
+        ]));
+        $this->command->info('Seller user created.');
 
         // Shop
         $this->command->warn(PHP_EOL . 'Creating shop brands...');

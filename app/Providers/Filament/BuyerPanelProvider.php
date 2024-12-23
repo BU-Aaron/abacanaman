@@ -47,6 +47,7 @@ class BuyerPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
+                'role:buyer',
             ]);
     }
 }

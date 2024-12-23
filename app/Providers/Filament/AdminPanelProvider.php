@@ -5,6 +5,7 @@ namespace App\Providers\Filament;
 use App\Filament\Admin\Pages\Auth\Login;
 use App\Filament\Admin\Pages\Dashboard;
 use App\Http\Middleware\Authenticate;
+use App\Http\Middleware\RoleMiddleware;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Panel;
@@ -61,6 +62,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
+                'role:admin',
             ])
             ->plugin(
                 SpatieLaravelTranslatablePlugin::make()
