@@ -10,17 +10,20 @@ trait Multitenantable
 {
     protected static function bootMultitenantable(): void
     {
-        $user = Auth::user();
-        $user = User::find($user->id);
-
         static::creating(function ($model) {
-            $model->user_id = Auth::id();
+            if (Auth::check()) {
+                $model->user_id = Auth::id();
+            }
         });
 
-        if (! $user->hasRole('admin')) {
-            static::addGlobalScope('created_by_user_id', function (Builder $builder) use ($user) {
-                $builder->where('user_id', $user->id);
-            });
-        }
+        static::addGlobalScope('created_by_user_id', function (Builder $builder) {
+            if (Auth::check()) {
+                $user = Auth::user();
+
+                if (!$user->hasRole('admin')) {
+                    $builder->where('user_id', $user->id);
+                }
+            }
+        });
     }
 }
