@@ -20,7 +20,7 @@
                     <h2 class="text-lg font-semibold mb-2">{{ $product->name }}</h2>
                     <p class="text-gray-700 mb-4">{{ Str::limit($product->description, 100) }}</p>
                     <div class="flex justify-between items-center">
-                        <span class="text-green-600 font-bold">${{ number_format($product->price, 2) }}</span>
+                        <span class="text-green-600 font-bold">PHP {{ number_format($product->price, 2) }}</span>
                         <a href="{{ route('product.show', $product) }}" class="text-sm text-green-500 hover:underline">
                             View Details
                         </a>

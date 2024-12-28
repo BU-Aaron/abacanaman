@@ -23,7 +23,9 @@
         <!-- Header with Categories -->
         <header class="bg-white shadow">
             <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-                <a href="{{ route('home') }}" class="text-xl font-bold">{{ config('app.name') }}</a>
+                <a href="{{ route('home') }}">
+                    @include('filament.app.logo')
+                </a>
                 <nav>
                     <ul class="flex space-x-4">
                         @php
@@ -32,7 +34,7 @@
                         @endphp
                         @foreach($categories as $category)
                             <li>
-                                <a href="{{ route('home', ['category' => $category->id]) }}" class="text-gray-600 hover:text-green-500">
+                                <a href="{{ route('home', ['selectedCategory' => $category->id]) }}" class="text-gray-600 hover:text-green-500">
                                     {{ $category->name }}
                                 </a>
                             </li>

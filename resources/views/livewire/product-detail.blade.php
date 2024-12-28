@@ -11,9 +11,9 @@
             <h1 class="text-3xl font-bold mb-4">{{ $product->name }}</h1>
             <p class="text-gray-700 mb-4">{{ $product->description }}</p>
             <div class="flex items-center mb-4">
-                <span class="text-green-600 font-bold text-xl">${{ number_format($product->price, 2) }}</span>
+                <span class="text-green-600 font-bold text-xl">PHP {{ number_format($product->price, 2) }}</span>
                 @if($product->old_price)
-                    <span class="text-gray-500 line-through ml-2">${{ number_format($product->old_price, 2) }}</span>
+                    <span class="text-gray-500 line-through ml-2">PHP {{ number_format($product->old_price, 2) }}</span>
                 @endif
             </div>
             <a href="#" class="inline-block bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">Add to Cart</a>
