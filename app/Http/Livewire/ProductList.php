@@ -17,6 +17,8 @@ class ProductList extends Component
 
     protected $listeners = ['categorySelected' => 'filterByCategory'];
 
+    protected $queryString = ['selectedCategory'];
+
     public function updatingSearch()
     {
         $this->resetPage();
