@@ -1,5 +1,11 @@
 <?php
 
-use App\Livewire\Form;
+use App\Http\Livewire\ProductList;
+use App\Http\Livewire\ProductDetail;
+use Illuminate\Support\Facades\Route;
 
-\Illuminate\Support\Facades\Route::get('form', Form::class);
+// Home Page Route
+Route::get('/', ProductList::class)->name('home');
+
+// Product Detail Page Route
+Route::get('/product/{product}', ProductDetail::class)->name('product.show');
