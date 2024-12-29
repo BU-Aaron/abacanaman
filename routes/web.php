@@ -4,6 +4,8 @@ use App\Livewire\Auth\ForgotPasswordPage;
 use App\Livewire\Auth\LoginPage;
 use App\Livewire\Auth\RegisterPage;
 use App\Livewire\Auth\ResetPasswordPage;
+use App\Livewire\BlogPage;
+use App\Livewire\BlogPost;
 use App\Livewire\CancelPage;
 use App\Livewire\CartPage;
 use App\Livewire\CategoriesPage;
@@ -15,7 +17,6 @@ use App\Livewire\ProductDetailPage;
 use App\Livewire\ProductsPage;
 use App\Livewire\SuccessPage;
 use Illuminate\Support\Facades\Route;
-
 
 Route::get('/', HomePage::class)->name('index');
 
@@ -33,6 +34,11 @@ Route::get('/my-orders', MyOrdersPage::class)->name('my-orders');
 
 Route::get('/my-orders/{order}', MyOrderDetailPage::class)->name('my-order-details');
 
+// New Blog Route
+Route::get('/blog', BlogPage::class)->name('blog');
+
+// Optionally, add route for individual blog posts
+Route::get('/blog/{slug}', BlogPost::class)->name('blog.post');
 
 // Auth routes
 
@@ -47,7 +53,6 @@ Route::get('/reset-password', ResetPasswordPage::class)->name('reset-password');
 Route::get('/success', SuccessPage::class)->name('success');
 
 Route::get('/cancelled', CancelPage::class)->name('cancelled');
-
 
 // Route::get('/', function () {
 //     return view('welcome');

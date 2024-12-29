@@ -11,7 +11,7 @@
         {{-- @livewireStyles --}}
 
     </head>
-    <body class="bg-slate-200 dark:bg-slate-700">
+    <body class="bg-gray-100 dark:bg-gray-800">
 
         @livewire('partials.navbar')
 
