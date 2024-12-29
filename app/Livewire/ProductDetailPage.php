@@ -9,7 +9,7 @@ use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
-#[Title('Product Details - ByteWebster')]
+#[Title('Product Details - Abacanaman')]
 class ProductDetailPage extends Component
 {
     use LivewireAlert;
@@ -21,7 +21,7 @@ class ProductDetailPage extends Component
     public function mount($slug)
     {
         $this->product = Product::where('slug', $slug)->with('media')->firstOrFail();
-        $this->title = $this->product->name . " - ByteWebster";
+        $this->title = $this->product->name . " - Abacanaman";
     }
 
     public function increaseQty()
