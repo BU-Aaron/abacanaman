@@ -9,17 +9,18 @@ use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
+#[Title('Product Details - ByteWebster')]
 class ProductDetailPage extends Component
 {
     use LivewireAlert;
 
-    public $product;
+    public Product $product;
     public $title;
     public $quantity = 1;
 
     public function mount($slug)
     {
-        $this->product = Product::where('slug', $slug)->firstOrFail();
+        $this->product = Product::where('slug', $slug)->with('media')->firstOrFail();
         $this->title = $this->product->name . " - ByteWebster";
     }
 
@@ -35,13 +36,12 @@ class ProductDetailPage extends Component
         }
     }
 
-    // Method for adding the product in the cart
-
+    // Method for adding the product to the cart
     public function addToCart($product_id)
     {
-        $total_count = CartManagement::addItemToCart($product_id);
+        $total_count = CartManagement::addItemToCart($product_id, $this->quantity);
 
-        $this->dispatch('update-cart-count', total_count: $total_count)->to(Navbar::class);
+        $this->dispatch('update-cart-count', ['total_count' => $total_count])->to(Navbar::class);
 
         $this->alert('success', 'Product added to the cart successfully!', [
             'position' => 'top-end',
