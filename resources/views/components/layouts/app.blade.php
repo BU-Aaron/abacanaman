@@ -1,60 +1,29 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
-        <meta charset="utf-8" />
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <meta name="application-name" content="{{ config('app.name') }}" />
-        <meta name="csrf-token" content="{{ csrf_token() }}" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>{{ $title ?? 'ByteWebster' }}</title>
 
-        <title>{{ config('app.name') }}</title>
-
-        <style>
-            [x-cloak] {
-                display: none !important;
-            }
-        </style>
-
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
         @filamentStyles
-        @vite('resources/css/app.css')
+        {{-- @livewireStyles --}}
+
     </head>
+    <body class="bg-slate-200 dark:bg-slate-700">
 
-    <body class="antialiased">
-        <!-- Header with Categories -->
-        <header class="bg-white shadow">
-            <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-                <a href="{{ route('home') }}">
-                    @include('filament.app.logo')
-                </a>
-                <nav>
-                    <ul class="flex space-x-4">
-                        @php
-                            use App\Models\Shop\Category;
-                            $categories = Category::whereNull('parent_id')->where('is_visible', true)->get();
-                        @endphp
-                        @foreach($categories as $category)
-                            <li>
-                                <a href="{{ route('home', ['selectedCategory' => $category->id]) }}" class="text-gray-600 hover:text-green-500">
-                                    {{ $category->name }}
-                                </a>
-                            </li>
-                        @endforeach
-                        <li>
-                            <a href="{{ route('home') }}" class="text-gray-600 hover:text-green-500">
-                                All Products
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-        </header>
+        @livewire('partials.navbar')
 
-        <!-- Main Content -->
-        <main>
-            {{ $slot }}
-        </main>
+        <main>{{ $slot }}</main>
 
-        @filamentScripts
-        @vite('resources/js/app.js')
+        @livewire('partials.footer')
+
+        @livewireScripts
+
+        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        <x-livewire-alert::scripts />
+
     </body>
 </html>
