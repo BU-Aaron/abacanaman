@@ -12,7 +12,7 @@
                 @foreach ($product->images as $image)
 
                   <div class="w-1/2 p-2 sm:w-1/4" x-on:click="mainImage='{{ url('storage', $image) }}'">
-                    <img src="{{ url('storage', $image) }}" alt="{{ $product->name }}" class="object-cover w-full lg:h-20 cursor-pointer hover:border hover:border-blue-500">
+                    <img src="{{ url('storage', $image) }}" alt="{{ $product->name }}" class="object-cover w-full lg:h-20 cursor-pointer hover:border hover:border-amber-500">
                   </div>
 
                 @endforeach
@@ -44,7 +44,7 @@
                 </p>
               </div>
               <div class="w-32 mb-8 ">
-                <label for="" class="w-full pb-1 text-xl font-semibold text-gray-700 border-b border-blue-300 dark:border-gray-600 dark:text-gray-400">Quantity</label>
+                <label for="" class="w-full pb-1 text-xl font-semibold text-gray-700 border-b border-amber-300 dark:border-gray-600 dark:text-gray-400">Quantity</label>
                 <div class="relative flex flex-row w-full h-10 mt-6 bg-transparent rounded-lg">
                   <button wire:click='decreaseQty' class="w-20 h-full text-gray-600 bg-gray-300 rounded-l outline-none cursor-pointer dark:hover:bg-gray-700 dark:text-gray-400 hover:text-gray-700 dark:bg-gray-900 hover:bg-gray-400">
                     <span class="m-auto text-2xl font-thin">-</span>
@@ -56,7 +56,7 @@
                 </div>
               </div>
               <div class="flex flex-wrap items-center gap-4">
-                <button wire:click='addToCart({{ $product->id }})' class="w-full p-4 bg-blue-500 rounded-md lg:w-2/5 dark:text-gray-200 text-gray-50 hover:bg-blue-600 dark:bg-blue-500 dark:hover:bg-blue-700">
+                <button wire:click='addToCart({{ $product->id }})' class="w-full p-4 bg-amber-500 rounded-md lg:w-2/5 dark:text-gray-200 text-gray-50 hover:bg-amber-600 dark:bg-amber-500 dark:hover:bg-amber-700">
                   <span wire:loading.remove>Add to cart</span><span wire:loading>Adding...</span>
                 </button>
               </div>

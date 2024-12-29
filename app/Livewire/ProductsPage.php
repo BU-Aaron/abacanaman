@@ -14,11 +14,9 @@ use Livewire\Component;
 use Livewire\WithPagination;
 
 #[Title('Products - ByteWebster')]
-
 class ProductsPage extends Component
 {
     use LivewireAlert;
-
     use WithPagination;
 
     #[Url]
@@ -28,10 +26,7 @@ class ProductsPage extends Component
     public $selected_brands = [];
 
     #[Url]
-    public $featured = [];
-
-    #[Url]
-    public $on_sale = [];
+    public $featured = false;
 
     #[Url]
     public $price_range = 0;
@@ -39,13 +34,21 @@ class ProductsPage extends Component
     #[Url]
     public $sort = 'latest';
 
-    // Method for adding the product in the cart
+    protected $paginationTheme = 'tailwind';
+
+    protected $queryString = [
+        'selected_categories',
+        'selected_brands',
+        'featured',
+        'price_range',
+        'sort',
+    ];
 
     public function addToCart($product_id)
     {
         $total_count = CartManagement::addItemToCart($product_id);
 
-        $this->dispatch('update-cart-count', total_count: $total_count)->to(Navbar::class);
+        $this->dispatch('update-cart-count', ['total_count' => $total_count])->to(Navbar::class);
 
         $this->alert('success', 'Product added to the cart successfully!', [
             'position' => 'top-end',
@@ -56,45 +59,43 @@ class ProductsPage extends Component
 
     public function render()
     {
-        $products = Product::query()->where('is_active', 1);
+        $productsQuery = Product::query()->where('is_visible', true);
 
-        $brands = Brand::where('is_active', 1)->get(['id', 'name', 'slug']);
-
-        $categories = Category::where('is_active', 1)->get(['id', 'name', 'slug']);
-
+        $brands = Brand::where('is_visible', true)->get(['id', 'name', 'slug']);
+        $categories = Category::where('is_visible', true)->get(['id', 'name', 'slug']);
 
         if (!empty($this->selected_categories)) {
-            $products->whereIn('category_id', $this->selected_categories);
+            $productsQuery->whereHas('categories', function ($query) {
+                $query->whereIn('shop_categories.id', $this->selected_categories);
+            });
         }
 
         if (!empty($this->selected_brands)) {
-            $products->whereIn('brand_id', $this->selected_brands);
+            $productsQuery->whereIn('shop_brand_id', $this->selected_brands);
         }
 
         if ($this->featured) {
-            $products->where('is_featured', 1);
+            $productsQuery->where('featured', true);
         }
 
-        if ($this->on_sale) {
-            $products->where('on_sale', 1);
-        }
-
-        if ($this->price_range) {
-            $products->whereBetween('price', [0, $this->price_range]);
+        if ($this->price_range > 0) {
+            $productsQuery->whereBetween('price', [0, $this->price_range]);
         }
 
         if ($this->sort == 'latest') {
-            $products->latest();
+            $productsQuery->orderBy('published_at', 'desc');
         }
 
         if ($this->sort == 'price') {
-            $products->orderBy('price');
+            $productsQuery->orderBy('price', 'asc');
         }
 
+        $products = $productsQuery->paginate(12);
+
         return view('livewire.products-page', [
-            'products' => $products->paginate(12),
+            'products' => $products,
             'brands' => $brands,
-            'categories' => $categories
+            'categories' => $categories,
         ]);
     }
 }

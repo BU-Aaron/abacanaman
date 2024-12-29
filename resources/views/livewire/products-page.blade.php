@@ -11,8 +11,8 @@
                 @foreach ($categories as $category)
 
                   <li class="mb-4" wire:key="{{ $category->id }}">
-                    <label for="{{ $category->slug }}" class="flex items-center dark:text-gray-400 ">
-                      <input type="checkbox" wire:model.live="selected_categories" id="{{ $category->slug }}" value="{{ $category->id }}" class="w-4 h-4 mr-2">
+                    <label for="category_{{ $category->slug }}" class="flex items-center dark:text-gray-400 ">
+                      <input type="checkbox" wire:model.live="selected_categories" id="category_{{ $category->slug }}" value="{{ $category->id }}" class="w-4 h-4 mr-2">
                       <span class="text-lg">{{ $category->name }}</span>
                     </label>
                   </li>
@@ -30,8 +30,8 @@
                 @foreach ($brands as $brand)
 
                   <li class="mb-4" wire:key="{{ $brand->id }}">
-                    <label for="{{ $brand->slug }}" class="flex items-center dark:text-gray-300">
-                      <input type="checkbox" wire:model.live="selected_brands" value="{{ $brand->id }}" id="{{ $brand->slug }}" class="w-4 h-4 mr-2">
+                    <label for="brand_{{ $brand->slug }}" class="flex items-center dark:text-gray-300">
+                      <input type="checkbox" wire:model.live="selected_brands" id="brand_{{ $brand->slug }}" value="{{ $brand->id }}" class="w-4 h-4 mr-2">
                       <span class="text-lg dark:text-gray-400">{{ $brand->name }}</span>
                     </label>
                   </li>
@@ -52,13 +52,6 @@
                   </label>
                 </li>
 
-                <li class="mb-4">
-                  <label for="on_sale" class="flex items-center dark:text-gray-300">
-                    <input type="checkbox" id="on_sale" value="1" wire:model.live="on_sale" class="w-4 h-4 mr-2">
-                    <span class="text-lg dark:text-gray-400">On Sale</span>
-                  </label>
-                </li>
-
               </ul>
             </div>
 
@@ -66,11 +59,11 @@
               <h2 class="text-2xl font-bold dark:text-gray-400">Price</h2>
               <div class="w-16 pb-2 mb-6 border-b border-rose-600 dark:border-gray-400"></div>
               <div>
-                <div class="font-semibold">PHP 123.00</div>
-                <input type="range" wire:model.live="price_range" class="w-full h-1 mb-4 bg-blue-100 rounded appearance-none cursor-pointer" max="500000" value="0" step="1000">
+                <div class="font-semibold">PHP {{ number_format($price_range, 2) }}</div>
+                <input type="range" wire:model.live="price_range" class="w-full h-1 mb-4 bg-amber-100 rounded appearance-none cursor-pointer" max="500000" min="0" step="1000">
                 <div class="flex justify-between">
-                  <span class="inline-block text-lg font-bold text-blue-400 ">PHP 1000.00</span>
-                  <span class="inline-block text-lg font-bold text-blue-400 ">PHP 500000.00</span>
+                  <span class="inline-block text-lg font-bold text-amber-400 ">PHP 1,000.00</span>
+                  <span class="inline-block text-lg font-bold text-amber-400 ">PHP 500,000.00</span>
                 </div>
               </div>
             </div>
@@ -99,8 +92,12 @@
                 <div class="w-full px-3 mb-6 sm:w-1/2 md:w-1/3" wire:key="{{ $product->id }}">
                   <div class="border border-gray-300 dark:border-gray-700">
                     <div class="relative bg-gray-200">
-                      <a wire:navigate href="{{ route('product-details', $product->slug) }}" class="">
-                        <img src="{{ url('storage', $product->images[0]) }}" alt="{{ $product->name }}" class="object-cover w-full h-56 mx-auto ">
+                      <a href="{{ route('product-details', $product->slug) }}" class="">
+                        @if($product->getFirstMediaUrl('product-images'))
+                          <img src="{{ $product->getFirstMediaUrl('product-images') }}" alt="{{ $product->name }}" class="object-cover w-full h-56 mx-auto">
+                        @else
+                          <img src="{{ asset('images/default-product.jpg') }}" alt="{{ $product->name }}" class="object-cover w-full h-56 mx-auto">
+                        @endif
                       </a>
                     </div>
                     <div class="p-3">
@@ -110,7 +107,7 @@
                         </h3>
                       </div>
                       <p class="text-lg">
-                        <span class="text-green-600 dark:text-green-600">{{ Number::currency($product->price, 'INR') }}</span>
+                        <span class="text-green-600 dark:text-green-600">PHP {{ number_format($product->price, 2) }}</span>
                       </p>
                     </div>
                     <div class="flex justify-center p-4 border-t border-gray-300 dark:border-gray-700">
