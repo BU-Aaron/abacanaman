@@ -16,6 +16,7 @@ use App\Livewire\MyOrdersPage;
 use App\Livewire\ProductDetailPage;
 use App\Livewire\ProductsPage;
 use App\Livewire\SuccessPage;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomePage::class)->name('index');
@@ -28,32 +29,35 @@ Route::get('/product/{slug}', ProductDetailPage::class)->name('product-details')
 
 Route::get('/cart', CartPage::class)->name('cart-products');
 
-Route::get('/checkout', CheckoutPage::class)->name('checkout');
 
-Route::get('/my-orders', MyOrdersPage::class)->name('my-orders');
 
-Route::get('/my-orders/{order}', MyOrderDetailPage::class)->name('my-order-details');
-
-// New Blog Route
 Route::get('/blog', BlogPage::class)->name('blog');
 
-// Optionally, add route for individual blog posts
 Route::get('/blog/{slug}', BlogPost::class)->name('blog.post');
 
-// Auth routes
+Route::middleware('guest')->group(function () {
+    Route::get('/login', LoginPage::class)->name('login');
 
-Route::get('/login', LoginPage::class)->name('login');
+    Route::get('/register', RegisterPage::class)->name('register');
 
-Route::get('/register', RegisterPage::class)->name('register');
+    Route::get('/forgot-password', ForgotPasswordPage::class)->name('forgot-password');
 
-Route::get('/forgot-password', ForgotPasswordPage::class)->name('forgot-password');
+    Route::get('/reset-password', ResetPasswordPage::class)->name('reset-password');
+});
 
-Route::get('/reset-password', ResetPasswordPage::class)->name('reset-password');
+Route::middleware('auth')->group(function () {
+    Route::get('/logout', function () {
+        Auth::logout();
+        return redirect('/');
+    });
 
-Route::get('/success', SuccessPage::class)->name('success');
+    Route::get('/checkout', CheckoutPage::class)->name('checkout');
 
-Route::get('/cancelled', CancelPage::class)->name('cancelled');
+    Route::get('/my-orders', MyOrdersPage::class)->name('my-orders');
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+    Route::get('/my-orders/{order}', MyOrderDetailPage::class)->name('my-order-details');
+
+    Route::get('/success', SuccessPage::class)->name('success');
+
+    Route::get('/cancelled', CancelPage::class)->name('cancelled');
+});
