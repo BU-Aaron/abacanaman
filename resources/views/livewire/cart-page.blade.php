@@ -68,7 +68,7 @@
               <span class="font-semibold">PHP {{ $grand_total }}</span>
             </div>
             @if ($cart_items)
-                <button class="bg-amber-500 text-white py-2 px-4 rounded-lg mt-4 w-full">Checkout</button>
+                <a href="/checkout" class="bg-amber-500 text-white py-2 px-4 rounded-lg mt-4 w-full block text-center">Checkout</a>
             @endif
           </div>
         </div>
