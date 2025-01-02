@@ -63,7 +63,6 @@
                 <button wire:click='addToCart({{ $product->id }})'
                         class="w-full p-4 bg-amber-500 rounded-md lg:w-2/5 dark:text-gray-200 text-gray-50 hover:bg-amber-600 dark:bg-amber-500 dark:hover:bg-amber-700">
                   <span wire:loading.remove>Add to cart</span>
-                  <span wire:loading>Adding...</span>
                 </button>
               </div>
             </div>
