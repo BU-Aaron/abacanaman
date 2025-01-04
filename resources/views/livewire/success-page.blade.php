@@ -1,5 +1,5 @@
 <section class="flex items-center font-poppins dark:bg-gray-800 ">
-    <div class="justify-center flex-1 max-w-6xl px-4 py-4 mx-auto bg-white border rounded-md dark:border-gray-900 dark:bg-gray-900 md:py-10 md:px-10">
+    <div class="justify-center flex-1 max-w-6xl px-4 py-4 mt-10 mb-10 mx-auto bg-white border rounded-md dark:border-gray-900 dark:bg-gray-900 md:py-10 md:px-10">
       <div>
         <h1 class="px-4 mb-8 text-2xl font-semibold tracking-wide text-gray-700 dark:text-gray-300 ">
           Thank you. Your order has been received. </h1>

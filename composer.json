@@ -22,7 +22,8 @@
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.8",
         "squirephp/countries-en": "^3.3",
-        "squirephp/currencies-en": "^3.3"
+        "squirephp/currencies-en": "^3.3",
+        "stripe/stripe-php": "^16.4"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",
