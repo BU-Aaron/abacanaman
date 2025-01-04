@@ -47,8 +47,8 @@ class ManagePostComments extends ManageRelatedRecords
                 Forms\Components\TextInput::make('title')
                     ->required(),
 
-                Forms\Components\Select::make('customer_id')
-                    ->relationship('customer', 'name')
+                Forms\Components\Select::make('user_id')
+                    ->relationship('user', 'name')
                     ->searchable()
                     ->required(),
 

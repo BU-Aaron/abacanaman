@@ -3,6 +3,7 @@
 namespace App\Models\Shop;
 
 use App\Enums\OrderStatus;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -31,6 +32,7 @@ class Order extends Model
         'shipping_price',
         'shipping_method',
         'notes',
+        'user_id',
     ];
 
     protected $casts = [
@@ -43,10 +45,10 @@ class Order extends Model
         return $this->morphOne(OrderAddress::class, 'addressable');
     }
 
-    /** @return BelongsTo<Customer,self> */
-    public function customer(): BelongsTo
+    /** @return BelongsTo<User, self> */
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(Customer::class, 'shop_customer_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     /** @return HasMany<OrderItem> */

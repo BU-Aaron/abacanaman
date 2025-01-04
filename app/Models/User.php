@@ -2,15 +2,19 @@
 
 namespace App\Models;
 
+use App\Models\Shop\Order;
+use App\Models\Shop\Payment;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class User extends Authenticatable implements FilamentUser
 {
@@ -44,7 +48,7 @@ class User extends Authenticatable implements FilamentUser
     ];
 
     /**
-     * @var array<string, string>
+     *
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
@@ -73,5 +77,37 @@ class User extends Authenticatable implements FilamentUser
             default:
                 return false;
         }
+    }
+
+    /**
+     * Get the orders associated with the user.
+     */
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class, 'user_id');
+    }
+
+    /**
+     * Get the payments associated with the user's orders.
+     */
+    public function payments(): HasManyThrough
+    {
+        return $this->hasManyThrough(Payment::class, Order::class, 'user_id', 'order_id');
+    }
+
+    /**
+     * Get the comments made by the user.
+     */
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class, 'user_id');
+    }
+
+    /**
+     * Get the addresses associated with the user.
+     */
+    public function addresses(): MorphToMany
+    {
+        return $this->morphToMany(Address::class, 'addressable');
     }
 }

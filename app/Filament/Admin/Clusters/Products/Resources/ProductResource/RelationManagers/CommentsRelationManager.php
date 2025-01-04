@@ -27,8 +27,8 @@ class CommentsRelationManager extends RelationManager
                 Forms\Components\TextInput::make('title')
                     ->required(),
 
-                Forms\Components\Select::make('customer_id')
-                    ->relationship('customer', 'name')
+                Forms\Components\Select::make('user_id')
+                    ->relationship('user', 'name')
                     ->searchable()
                     ->required(),
 
@@ -48,7 +48,8 @@ class CommentsRelationManager extends RelationManager
             ->columns(1)
             ->schema([
                 TextEntry::make('title'),
-                TextEntry::make('customer.name'),
+                TextEntry::make('user.name')
+                    ->label('Customer'),
                 IconEntry::make('is_visible')
                     ->label('Visibility'),
                 TextEntry::make('content')

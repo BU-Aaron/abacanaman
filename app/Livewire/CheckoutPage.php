@@ -60,7 +60,7 @@ class CheckoutPage extends Component
         // Create the Order
         $order = Order::create([
             'number' => $orderNumber,
-            'shop_customer_id' => Auth::id(),
+            'user_id' => Auth::id(),
             'currency' => 'php',
             'total_price' => CartManagement::calculateGrandTotal($cart_items),
             'status' => 'new',

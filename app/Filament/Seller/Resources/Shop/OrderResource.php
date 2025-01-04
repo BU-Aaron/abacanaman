@@ -240,8 +240,8 @@ class OrderResource extends Resource
                 ->maxLength(32)
                 ->unique(Order::class, 'number', ignoreRecord: true),
 
-            Forms\Components\Select::make('shop_customer_id')
-                ->relationship('customer', 'name')
+            Forms\Components\Select::make('user_id')
+                ->relationship('user', 'name')
                 ->searchable()
                 ->required()
                 ->createOptionForm([

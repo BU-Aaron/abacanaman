@@ -86,7 +86,8 @@ class OrderResource extends Resource
                 Tables\Columns\TextColumn::make('number')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('customer.name')
+                Tables\Columns\TextColumn::make('user.name')
+                    ->label('Customer')
                     ->searchable()
                     ->sortable()
                     ->toggleable(),
@@ -240,8 +241,8 @@ class OrderResource extends Resource
                 ->maxLength(32)
                 ->unique(Order::class, 'number', ignoreRecord: true),
 
-            Forms\Components\Select::make('shop_customer_id')
-                ->relationship('customer', 'name')
+            Forms\Components\Select::make('user_id')
+                ->relationship('user', 'name')
                 ->searchable()
                 ->required()
                 ->createOptionForm([

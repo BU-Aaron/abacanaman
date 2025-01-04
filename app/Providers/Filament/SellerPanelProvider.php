@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Seller\Pages\Auth\Registration;
 use App\Http\Middleware\AuthenticateSeller;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -27,7 +28,7 @@ class SellerPanelProvider extends PanelProvider
             ->brandLogo(fn() => view('filament.app.logo'))
             ->login()
             ->profile()
-            ->registration()
+            ->registration(Registration::class)
             ->passwordReset()
             ->emailVerification()
             ->colors([

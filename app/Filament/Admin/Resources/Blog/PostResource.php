@@ -123,7 +123,7 @@ class PostResource extends Resource
                     ->label('Published Date')
                     ->date(),
 
-                Tables\Columns\TextColumn::make('comments.customer.name')
+                Tables\Columns\TextColumn::make('comments.user.name')
                     ->label('Comment Authors')
                     ->listWithLineBreaks()
                     ->limitList(2)
