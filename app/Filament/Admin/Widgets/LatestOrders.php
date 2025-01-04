@@ -29,7 +29,8 @@ class LatestOrders extends BaseWidget
                 Tables\Columns\TextColumn::make('number')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('customer.name')
+                Tables\Columns\TextColumn::make('user.name')
+                    ->label('Customer')
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('status')
