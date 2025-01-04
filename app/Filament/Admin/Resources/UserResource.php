@@ -30,14 +30,6 @@ class UserResource extends Resource
                     ->required(),
                 TextInput::make('email')
                     ->required(),
-                Select::make('role')
-                    ->label('Role')
-                    ->options([
-                        User::ROLE_ADMIN => 'Admin',
-                        User::ROLE_BUYER => 'Buyer',
-                        User::ROLE_SELLER => 'Seller',
-                    ])
-                    ->required(),
             ]);
     }
 

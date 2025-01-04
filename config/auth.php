@@ -14,7 +14,7 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'web',
+        'guard' => 'buyer',
         'passwords' => 'users',
     ],
 
@@ -36,9 +36,25 @@ return [
     */
 
     'guards' => [
-        'web' => [
+        'buyer' => [
             'driver' => 'session',
             'provider' => 'users',
+            'passwords' => 'users',
+            'session_key' => 'buyer_session',
+        ],
+
+        'seller' => [
+            'driver' => 'session',
+            'provider' => 'users',
+            'passwords' => 'users',
+            'session_key' => 'seller_session',
+        ],
+
+        'admin' => [
+            'driver' => 'session',
+            'provider' => 'users',
+            'passwords' => 'users',
+            'session_key' => 'admin_session',
         ],
     ],
 

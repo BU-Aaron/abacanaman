@@ -16,6 +16,7 @@ use App\Livewire\MyOrdersPage;
 use App\Livewire\ProductDetailPage;
 use App\Livewire\ProductsPage;
 use App\Livewire\SuccessPage;
+use Filament\Facades\Filament;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -45,7 +46,7 @@ Route::middleware('guest')->group(function () {
     Route::get('/reset-password', ResetPasswordPage::class)->name('reset-password');
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware('auth.buyer')->group(function () {
     Route::get('/logout', function () {
         Auth::logout();
         return redirect('/');
@@ -61,3 +62,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/cancelled', CancelPage::class)->name('cancelled');
 });
+
+// Route::middleware(['auth.seller'])->prefix('seller')->group(function () {
+//     Filament::routes();
+// });
