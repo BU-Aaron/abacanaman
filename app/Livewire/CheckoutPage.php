@@ -105,6 +105,7 @@ class CheckoutPage extends Component
             $redirect_url = route('success');
         }
 
+        CartManagement::clearCartItems();
         return redirect($redirect_url);
     }
 
