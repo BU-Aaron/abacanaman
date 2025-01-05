@@ -16,11 +16,14 @@ return new class extends Migration
         Schema::create('shop_order_addresses', function (Blueprint $table) {
             $table->id();
             $table->morphs('addressable');
-            $table->string('country')->nullable();
-            $table->string('street')->nullable();
+            $table->string('first_name')->nullable();
+            $table->string('last_name')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('street_address')->nullable();
             $table->string('city')->nullable();
+            $table->string('country')->nullable();
             $table->string('state')->nullable();
-            $table->string('zip')->nullable();
+            $table->string('zip_code')->nullable();
             $table->timestamps();
         });
     }

@@ -19,8 +19,9 @@ trait Multitenantable
         static::addGlobalScope('created_by_user_id', function (Builder $builder) {
             if (Auth::check()) {
                 $user = Auth::user();
+                $user = User::find($user->id);
 
-                if (!$user->hasRole('admin')) {
+                if ($user->hasRole('seller')) {
                     $builder->where('user_id', $user->id);
                 }
             }

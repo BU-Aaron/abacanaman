@@ -73,10 +73,13 @@ class CheckoutPage extends Component
 
         // Create the Order Address
         $orderAddress = new OrderAddress([
-            'street' => $this->street_address,
+            'first_name' => $this->first_name,
+            'last_name' => $this->last_name,
+            'phone' => $this->phone,
+            'street_address' => $this->street_address,
             'city' => $this->city,
             'state' => $this->state,
-            'zip' => $this->zip_code,
+            'zip_code' => $this->zip_code,
         ]);
 
         // Associate the address with the order

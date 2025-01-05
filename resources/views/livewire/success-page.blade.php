@@ -8,10 +8,15 @@
             <div class="flex items-center justify-center w-full pb-6 space-x-4 md:justify-start">
               <div class="flex flex-col items-start justify-start space-y-2">
                 <p class="text-lg font-semibold leading-4 text-left text-gray-800 dark:text-gray-400">
-                  Cielo Schimmel</p>
-                <p class="text-sm leading-4 text-gray-600 dark:text-gray-400">71582 Schmitt Springs</p>
-                <p class="text-sm leading-4 text-gray-600 dark:text-gray-400">Castro Valley, Delaware, 53476-0454</p>
-                <p class="text-sm leading-4 cursor-pointer dark:text-gray-400">Phone: 587-019-6103</p>
+                  {{ $latest_order->address->first_name }} {{ $latest_order->address->last_name }}
+                </p>
+                <p class="text-sm leading-4 text-gray-600 dark:text-gray-400">
+                    {{ $latest_order->address->street_address }}
+                </p>
+                <p class="text-sm leading-4 text-gray-600 dark:text-gray-400">
+                    {{ $latest_order->address->city }}, {{ $latest_order->address->state }}, {{ $latest_order->address->zip_code }}
+                </p>
+                <p class="text-sm leading-4 cursor-pointer dark:text-gray-400">Phone: {{ $latest_order->address->phone }}</p>
               </div>
             </div>
           </div>
@@ -21,19 +26,19 @@
             <p class="mb-2 text-sm leading-5 text-gray-600 dark:text-gray-400 ">
               Order Number: </p>
             <p class="text-base font-semibold leading-4 text-gray-800 dark:text-gray-400">
-              29</p>
+              {{ $latest_order->number }}</p>
           </div>
           <div class="w-full px-4 mb-4 md:w-1/4">
             <p class="mb-2 text-sm leading-5 text-gray-600 dark:text-gray-400 ">
               Date: </p>
             <p class="text-base font-semibold leading-4 text-gray-800 dark:text-gray-400">
-              17-02-2024</p>
+              {{ $latest_order->created_at->format('d-m-Y') }}</p>
           </div>
           <div class="w-full px-4 mb-4 md:w-1/4">
             <p class="mb-2 text-sm font-medium leading-5 text-gray-800 dark:text-gray-400 ">
               Total: </p>
             <p class="text-base font-semibold leading-4 text-amber-600 dark:text-gray-400">
-              ₹157,495.00</p>
+              PHP {{ number_format($latest_order->total_price, 2) }}</p>
           </div>
           <div class="w-full px-4 mb-4 md:w-1/4">
             <p class="mb-2 text-sm leading-5 text-gray-600 dark:text-gray-400 ">
@@ -49,21 +54,21 @@
               <div class="flex flex-col items-center justify-center w-full pb-4 space-y-4 border-b border-gray-200 dark:border-gray-700">
                 <div class="flex justify-between w-full">
                   <p class="text-base leading-4 text-gray-800 dark:text-gray-400">Subtotal</p>
-                  <p class="text-base leading-4 text-gray-600 dark:text-gray-400">₹157,495.00</p>
+                  <p class="text-base leading-4 text-gray-600 dark:text-gray-400">PHP {{ number_format($latest_order->total_price, 2) }}</p>
                 </div>
                 <div class="flex items-center justify-between w-full">
                   <p class="text-base leading-4 text-gray-800 dark:text-gray-400">Discount
                   </p>
-                  <p class="text-base leading-4 text-gray-600 dark:text-gray-400">00</p>
+                  <p class="text-base leading-4 text-gray-600 dark:text-gray-400">PHP 0.00</p>
                 </div>
                 <div class="flex items-center justify-between w-full">
                   <p class="text-base leading-4 text-gray-800 dark:text-gray-400">Shipping</p>
-                  <p class="text-base leading-4 text-gray-600 dark:text-gray-400">00</p>
+                  <p class="text-base leading-4 text-gray-600 dark:text-gray-400">PHP {{ number_format($latest_order->shipping_price, 2) }}</p>
                 </div>
               </div>
               <div class="flex items-center justify-between w-full">
                 <p class="text-base font-semibold leading-4 text-gray-800 dark:text-gray-400">Total</p>
-                <p class="text-base font-semibold leading-4 text-gray-600 dark:text-gray-400">₹157,495.00</p>
+                <p class="text-base font-semibold leading-4 text-gray-600 dark:text-gray-400">PHP {{ number_format($latest_order->total_price, 2) }}</p>
               </div>
             </div>
             <div class="flex flex-col w-full px-2 space-y-4 md:px-8 ">
@@ -82,7 +87,7 @@
                     </p>
                   </div>
                 </div>
-                <p class="text-lg font-semibold leading-6 text-gray-800 dark:text-gray-400">00</p>
+                <p class="text-lg font-semibold leading-6 text-gray-800 dark:text-gray-400">PHP {{ number_format($latest_order->shipping_price, 2) }}</p>
               </div>
             </div>
           </div>
@@ -91,7 +96,7 @@
           <a href="/products" class="w-full text-center px-4 py-2 text-amber-500 border border-amber-500 rounded-md md:w-auto hover:text-white hover:bg-amber-600 dark:border-gray-700 dark:hover:bg-gray-700 dark:text-gray-300">
             Go back shopping
           </a>
-          <a href="/orders" class="w-full text-center px-4 py-2 bg-amber-500 rounded-md text-gray-50 md:w-auto dark:text-gray-300 hover:bg-amber-600 dark:hover:bg-gray-700 dark:bg-gray-800">
+          <a href="/my-orders" class="w-full text-center px-4 py-2 bg-amber-500 rounded-md text-gray-50 md:w-auto dark:text-gray-300 hover:bg-amber-600 dark:hover:bg-gray-700 dark:bg-gray-800">
             View My Orders
           </a>
         </div>
