@@ -44,10 +44,10 @@ class AddressForm extends Forms\Components\Field
                 ->schema([
                     Forms\Components\Select::make('country')
                         ->searchable()
-                        ->getSearchResultsUsing(fn (string $query) => Country::where('name', 'like', "%{$query}%")->pluck('name', 'id'))
-                        ->getOptionLabelUsing(fn ($value): ?string => Country::firstWhere('id', $value)?->getAttribute('name')),
+                        ->getSearchResultsUsing(fn(string $query) => Country::where('name', 'like', "%{$query}%")->pluck('name', 'id'))
+                        ->getOptionLabelUsing(fn($value): ?string => Country::firstWhere('id', $value)?->getAttribute('name')),
                 ]),
-            Forms\Components\TextInput::make('street')
+            Forms\Components\TextInput::make('street_address')
                 ->label('Street address')
                 ->maxLength(255),
             Forms\Components\Grid::make(3)
@@ -57,7 +57,7 @@ class AddressForm extends Forms\Components\Field
                     Forms\Components\TextInput::make('state')
                         ->label('State / Province')
                         ->maxLength(255),
-                    Forms\Components\TextInput::make('zip')
+                    Forms\Components\TextInput::make('zip_code')
                         ->label('Zip / Postal code')
                         ->maxLength(255),
                 ]),
