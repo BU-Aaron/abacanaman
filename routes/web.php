@@ -56,7 +56,7 @@ Route::middleware('auth.buyer')->group(function () {
 
     Route::get('/my-orders', MyOrdersPage::class)->name('my-orders');
 
-    Route::get('/my-orders/{order}', MyOrderDetailPage::class)->name('my-order-details');
+    Route::get('/my-orders/{order}', MyOrderDetailPage::class)->name('my-orders.show');
 
     Route::get('/success', SuccessPage::class)->name('success');
 
