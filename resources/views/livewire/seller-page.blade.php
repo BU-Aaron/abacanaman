@@ -9,14 +9,14 @@
         <h2 class="text-3xl font-bold dark:text-gray-200">{{ $seller->store_name }}</h2>
         <p class="text-gray-600 dark:text-gray-400 mt-2">{{ $seller->store_description }}</p>
         <p class="text-gray-600 dark:text-gray-400 mt-2">Contact: {{ $seller->contact_number ?? 'N/A' }}</p>
-        {{-- <div class="mt-4">
+        <div class="mt-4">
             <a href="{{ route('buyer.chat', ['seller_id' => $seller->id]) }}" class="flex items-center px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.06 9.06 0 01-2-.294M3 12a9.06 9.06 0 012-.294c4.97 0 9 3.582 9 8 0 .3-.03.59-.086.874M15 16l-3-3-3 3" />
                 </svg>
                 Chat with Seller
             </a>
-        </div> --}}
+        </div>
     </div>
 
     <!-- Seller's Products -->

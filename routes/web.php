@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\BuyerChat;
 use App\Livewire\Auth\ForgotPasswordPage;
 use App\Livewire\Auth\LoginPage;
 use App\Livewire\Auth\RegisterPage;
@@ -53,8 +54,9 @@ Route::middleware('auth.buyer')->group(function () {
         return redirect('/');
     });
 
-
     Route::get('/checkout', CheckoutPage::class)->name('checkout');
+
+    Route::get('/chat/seller/{seller_id}', BuyerChat::class)->name('buyer.chat');
 
     Route::get('/my-orders', MyOrdersPage::class)->name('my-orders');
 
