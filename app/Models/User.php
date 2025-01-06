@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Shop\Order;
 use App\Models\Shop\Payment;
+use App\Models\Shop\Seller;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -15,6 +16,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class User extends Authenticatable implements FilamentUser
 {
@@ -109,5 +111,13 @@ class User extends Authenticatable implements FilamentUser
     public function addresses(): MorphToMany
     {
         return $this->morphToMany(Address::class, 'addressable');
+    }
+
+    /**
+     * Get the seller associated with the user.
+     */
+    public function seller(): HasOne
+    {
+        return $this->hasOne(Seller::class, 'user_id');
     }
 }

@@ -15,6 +15,7 @@ use App\Livewire\MyOrderDetailPage;
 use App\Livewire\MyOrdersPage;
 use App\Livewire\ProductDetailPage;
 use App\Livewire\ProductsPage;
+use App\Livewire\SellerPage;
 use App\Livewire\SuccessPage;
 use Filament\Facades\Filament;
 use Illuminate\Support\Facades\Auth;
@@ -52,6 +53,7 @@ Route::middleware('auth.buyer')->group(function () {
         return redirect('/');
     });
 
+
     Route::get('/checkout', CheckoutPage::class)->name('checkout');
 
     Route::get('/my-orders', MyOrdersPage::class)->name('my-orders');
@@ -63,6 +65,4 @@ Route::middleware('auth.buyer')->group(function () {
     Route::get('/cancelled', CancelPage::class)->name('cancelled');
 });
 
-// Route::middleware(['auth.seller'])->prefix('seller')->group(function () {
-//     Filament::routes();
-// });
+Route::get('info/seller/{seller_id}', SellerPage::class)->name('seller.page');

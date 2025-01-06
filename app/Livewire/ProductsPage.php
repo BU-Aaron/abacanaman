@@ -4,7 +4,7 @@ namespace App\Livewire;
 
 use App\Helpers\CartManagement;
 use App\Livewire\Partials\Navbar;
-use App\Models\Shop\Brand;
+use App\Models\Shop\Seller;
 use App\Models\Shop\Category;
 use App\Models\Shop\Product;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
@@ -20,10 +20,10 @@ class ProductsPage extends Component
     use WithPagination;
 
     #[Url]
-    public $selected_categories = [];
+    public $selected_sellers = [];
 
     #[Url]
-    public $selected_brands = [];
+    public $selected_categories = [];
 
     #[Url]
     public $featured = false;
@@ -37,8 +37,8 @@ class ProductsPage extends Component
     protected $paginationTheme = 'tailwind';
 
     protected $queryString = [
+        'selected_sellers',
         'selected_categories',
-        'selected_brands',
         'featured',
         'price_range',
         'sort',
@@ -61,17 +61,20 @@ class ProductsPage extends Component
     {
         $productsQuery = Product::query()->where('is_visible', true);
 
-        $brands = Brand::where('is_visible', true)->get(['id', 'name', 'slug']);
+        $sellers = Seller::with('user')->whereHas('user', function ($query) {
+            $query->where('role', 'seller');
+        })->get(['id', 'store_name']);
+
         $categories = Category::where('is_visible', true)->get(['id', 'name', 'slug']);
+
+        if (!empty($this->selected_sellers)) {
+            $productsQuery->whereIn('seller_id', $this->selected_sellers);
+        }
 
         if (!empty($this->selected_categories)) {
             $productsQuery->whereHas('categories', function ($query) {
                 $query->whereIn('shop_categories.id', $this->selected_categories);
             });
-        }
-
-        if (!empty($this->selected_brands)) {
-            $productsQuery->whereIn('shop_brand_id', $this->selected_brands);
         }
 
         if ($this->featured) {
@@ -84,17 +87,17 @@ class ProductsPage extends Component
 
         if ($this->sort == 'latest') {
             $productsQuery->orderBy('published_at', 'desc');
-        }
-
-        if ($this->sort == 'price') {
+        } elseif ($this->sort == 'price_asc') {
             $productsQuery->orderBy('price', 'asc');
+        } elseif ($this->sort == 'price_desc') {
+            $productsQuery->orderBy('price', 'desc');
         }
 
         $products = $productsQuery->paginate(12);
 
         return view('livewire.products-page', [
             'products' => $products,
-            'brands' => $brands,
+            'sellers' => $sellers,
             'categories' => $categories,
         ]);
     }

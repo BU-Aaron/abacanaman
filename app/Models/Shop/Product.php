@@ -58,4 +58,12 @@ class Product extends Model implements HasMedia
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    /**
+     * @return BelongsTo<Seller, self>
+     */
+    public function seller(): BelongsTo
+    {
+        return $this->belongsTo(Seller::class, 'seller_id');
+    }
 }
