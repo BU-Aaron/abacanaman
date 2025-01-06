@@ -64,11 +64,11 @@
             @foreach ($sellers as $seller)
 
               <div class="bg-white rounded-lg shadow-md dark:bg-gray-800" wire:key="{{ $seller->id }}">
-                <a href="/seller/{{ $seller->id }}" class="">
+                <a href="{{ route('seller.page', $seller->id) }}" class="">
                   <img src="https://placehold.co/600x400" alt="{{ $seller->store_name }}" class="object-cover w-full h-64 rounded-t-lg">
                 </a>
                 <div class="p-5 text-center">
-                  <a href="/seller/{{ $seller->id }}" class="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-300">
+                  <a href="{{ route('seller.page', $seller->id) }}" class="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-300">
                     {{ $seller->store_name }}
                   </a>
                 </div>
