@@ -6,6 +6,7 @@ use App\Filament\Seller\Resources\ConversationResource\Pages;
 use App\Filament\Seller\Resources\Shop\ConversationResource\Pages\CreateConversation;
 use App\Filament\Seller\Resources\Shop\ConversationResource\Pages\EditConversation;
 use App\Filament\Seller\Resources\Shop\ConversationResource\Pages\ListConversations;
+use App\Filament\Seller\Resources\Shop\ConversationResource\Pages\ViewConversation;
 use App\Models\Shop\Conversation;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -70,6 +71,7 @@ class ConversationResource extends Resource
             'index' => ListConversations::route('/'),
             'create' => CreateConversation::route('/create'),
             'edit' => EditConversation::route('/{record}/edit'),
+            'view' => ViewConversation::route('/{record}/view'),
         ];
     }
 }

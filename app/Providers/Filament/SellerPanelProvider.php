@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Seller\Pages\Auth\Registration;
+use App\Filament\Seller\Resources\Shop\ConversationResource\Pages\ViewConversation;
 use App\Http\Middleware\AuthenticateSeller;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;

@@ -16,4 +16,13 @@ class ListConversations extends ListRecords
             Actions\CreateAction::make(),
         ];
     }
+
+    protected function getTableActions(): array
+    {
+        return [
+            Actions\ViewAction::make()
+                ->label('View Chat')
+                ->icon('heroicon-o-chat-bubble-left-ellipsis'),
+        ];
+    }
 }
