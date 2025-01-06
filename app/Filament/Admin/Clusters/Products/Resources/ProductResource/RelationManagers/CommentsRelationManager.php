@@ -52,6 +52,8 @@ class CommentsRelationManager extends RelationManager
                     ->label('Customer'),
                 IconEntry::make('is_visible')
                     ->label('Visibility'),
+                TextEntry::make('rating')
+                    ->label('Rating'),
                 TextEntry::make('content')
                     ->markdown(),
             ]);
@@ -66,9 +68,13 @@ class CommentsRelationManager extends RelationManager
                     ->searchable()
                     ->sortable(),
 
-                Tables\Columns\TextColumn::make('customer.name')
+                Tables\Columns\TextColumn::make('user.name')
                     ->label('Customer')
                     ->searchable()
+                    ->sortable(),
+
+                Tables\Columns\TextColumn::make('rating')
+                    ->label('Rating')
                     ->sortable(),
 
                 Tables\Columns\IconColumn::make('is_visible')

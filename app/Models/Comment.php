@@ -18,6 +18,7 @@ class Comment extends Model
 
     protected $casts = [
         'is_visible' => 'boolean',
+        'rating' => 'integer',
     ];
 
     /** @return BelongsTo<User, self> */
