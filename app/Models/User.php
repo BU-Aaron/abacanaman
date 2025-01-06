@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Shop\Conversation;
+use App\Models\Shop\Message;
 use App\Models\Shop\Order;
 use App\Models\Shop\Payment;
 use App\Models\Shop\Seller;
