@@ -15,6 +15,8 @@ class ViewConversation extends ViewRecord
 {
     protected static string $resource = ConversationResource::class;
 
+    protected static string $view = 'filament.seller.pages.view-conversation';
+
     // Property to hold the new message content
     public $newMessage;
 
@@ -81,12 +83,5 @@ class ViewConversation extends ViewRecord
 
         // Clear the input field
         $this->newMessage = '';
-    }
-
-    public function render(): View
-    {
-        return view('filament.seller.pages.view-conversation', [
-            'messages' => $this->getTableQuery()->get(),
-        ]);
     }
 }
