@@ -74,7 +74,25 @@
               </p>
             </div>
             <div class="mt-1 flex items-center gap-x-2">
-              <span class="bg-yellow-500 py-1 px-3 rounded text-white shadow">{{ $order->status->value }}</span>
+                @php
+                    $status = '';
+                    if ($order->status->value == 'new') {
+                        $status = '<span class="bg-blue-500 py-1 px-3 rounded text-white shadow">New</span>';
+                    }
+                    if ($order->status->value == 'processing') {
+                        $status = '<span class="bg-orange-500 py-1 px-3 rounded text-white shadow">Processing</span>';
+                    }
+                    if ($order->status->value == 'shipped') {
+                        $status = '<span class="bg-teal-500 py-1 px-3 rounded text-white shadow">Shipped</span>';
+                    }
+                    if ($order->status->value == 'delivered') {
+                        $status = '<span class="bg-green-500 py-1 px-3 rounded text-white shadow">Delivered</span>';
+                    }
+                    if ($order->status->value == 'cancelled') {
+                        $status = '<span class="bg-red-500 py-1 px-3 rounded text-white shadow">Cancelled</span>';
+                    }
+                @endphp
+              {!! $status !!}
             </div>
           </div>
         </div>

@@ -41,7 +41,7 @@
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                         {!! $status !!}
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200"><span class="bg-green-500 py-1 px-3 rounded text-white shadow">{{ $order->payment_status }}</span></td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200"><span class="bg-green-500 py-1 px-3 rounded text-white shadow">Paid</span></td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">PHP {{ number_format($order->total_price, 2) }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
                         <a href="{{ route('my-orders.show', $order->id) }}" class="bg-slate-600 text-white py-2 px-4 rounded-md hover:bg-slate-500">View Details</a>
