@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\DiscountCalendar;
 use App\Livewire\BuyerChat;
 use App\Livewire\Auth\ForgotPasswordPage;
 use App\Livewire\Auth\LoginPage;
@@ -68,3 +69,5 @@ Route::middleware('auth.buyer')->group(function () {
 });
 
 Route::get('info/seller/{seller_id}', SellerPage::class)->name('seller.page');
+
+Route::get('/discounts/calendar', DiscountCalendar::class)->name('discounts.calendar');
