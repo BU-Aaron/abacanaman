@@ -66,4 +66,20 @@ class Product extends Model implements HasMedia
     {
         return $this->belongsTo(Seller::class, 'seller_id');
     }
+
+    /**
+     * Get the discounts for the product.
+     */
+    public function discounts()
+    {
+        return $this->hasMany(Discount::class);
+    }
+
+    /**
+     * Get the active discount based on current date.
+     */
+    public function activeDiscount()
+    {
+        return $this->hasOne(Discount::class)->whereDate('start_date', '<=', now())->whereDate('end_date', '>=', now());
+    }
 }
