@@ -49,18 +49,18 @@ class OrderResource extends Resource
                             ->schema(static::getDetailsFormSchema())
                             ->columns(2),
 
-                        Forms\Components\Section::make('Order items')
-                            ->headerActions([
-                                Action::make('reset')
-                                    ->modalHeading('Are you sure?')
-                                    ->modalDescription('All existing items will be removed from the order.')
-                                    ->requiresConfirmation()
-                                    ->color('danger')
-                                    ->action(fn(Forms\Set $set) => $set('items', [])),
-                            ])
-                            ->schema([
-                                static::getItemsRepeater(),
-                            ]),
+                        // Forms\Components\Section::make('Order items')
+                        //     ->headerActions([
+                        //         Action::make('reset')
+                        //             ->modalHeading('Are you sure?')
+                        //             ->modalDescription('All existing items will be removed from the order.')
+                        //             ->requiresConfirmation()
+                        //             ->color('danger')
+                        //             ->action(fn(Forms\Set $set) => $set('items', [])),
+                        //     ])
+                        //     ->schema([
+                        //         // static::getItemsRepeater(),
+                        //     ]),
                     ])
                     ->columnSpan(['lg' => fn(?Order $record) => $record === null ? 3 : 2]),
 
@@ -175,7 +175,8 @@ class OrderResource extends Resource
     public static function getRelations(): array
     {
         return [
-            RelationManagers\PaymentsRelationManager::class,
+            // RelationManagers\PaymentsRelationManager::class,
+            RelationManagers\OrderItemsRelationManager::class,
         ];
     }
 
@@ -300,66 +301,66 @@ class OrderResource extends Resource
         ];
     }
 
-    public static function getItemsRepeater(): Repeater
-    {
-        return Repeater::make('items')
-            ->relationship()
-            ->schema([
-                Forms\Components\Select::make('shop_product_id')
-                    ->label('Product')
-                    ->options(Product::query()->pluck('name', 'id'))
-                    ->required()
-                    ->reactive()
-                    ->afterStateUpdated(fn($state, Forms\Set $set) => $set('unit_price', Product::find($state)?->price ?? 0))
-                    ->distinct()
-                    ->disableOptionsWhenSelectedInSiblingRepeaterItems()
-                    ->columnSpan([
-                        'md' => 5,
-                    ])
-                    ->searchable(),
+    // public static function getItemsRepeater(): Repeater
+    // {
+    //     return Repeater::make('items')
+    //         ->relationship()
+    //         ->schema([
+    //             Forms\Components\Select::make('shop_product_id')
+    //                 ->label('Product')
+    //                 ->options(Product::query()->pluck('name', 'id'))
+    //                 ->required()
+    //                 ->reactive()
+    //                 ->afterStateUpdated(fn($state, Forms\Set $set) => $set('unit_price', Product::find($state)?->price ?? 0))
+    //                 ->distinct()
+    //                 ->disableOptionsWhenSelectedInSiblingRepeaterItems()
+    //                 ->columnSpan([
+    //                     'md' => 5,
+    //                 ])
+    //                 ->searchable(),
 
-                Forms\Components\TextInput::make('qty')
-                    ->label('Quantity')
-                    ->numeric()
-                    ->default(1)
-                    ->columnSpan([
-                        'md' => 2,
-                    ])
-                    ->required(),
+    //             Forms\Components\TextInput::make('qty')
+    //                 ->label('Quantity')
+    //                 ->numeric()
+    //                 ->default(1)
+    //                 ->columnSpan([
+    //                     'md' => 2,
+    //                 ])
+    //                 ->required(),
 
-                Forms\Components\TextInput::make('unit_price')
-                    ->label('Unit Price')
-                    ->disabled()
-                    ->dehydrated()
-                    ->numeric()
-                    ->required()
-                    ->columnSpan([
-                        'md' => 3,
-                    ]),
-            ])
-            ->extraItemActions([
-                Action::make('openProduct')
-                    ->tooltip('Open product')
-                    ->icon('heroicon-m-arrow-top-right-on-square')
-                    ->url(function (array $arguments, Repeater $component): ?string {
-                        $itemData = $component->getRawItemState($arguments['item']);
+    //             Forms\Components\TextInput::make('unit_price')
+    //                 ->label('Unit Price')
+    //                 ->disabled()
+    //                 ->dehydrated()
+    //                 ->numeric()
+    //                 ->required()
+    //                 ->columnSpan([
+    //                     'md' => 3,
+    //                 ]),
+    //         ])
+    //         ->extraItemActions([
+    //             Action::make('openProduct')
+    //                 ->tooltip('Open product')
+    //                 ->icon('heroicon-m-arrow-top-right-on-square')
+    //                 ->url(function (array $arguments, Repeater $component): ?string {
+    //                     $itemData = $component->getRawItemState($arguments['item']);
 
-                        $product = Product::find($itemData['shop_product_id']);
+    //                     $product = Product::find($itemData['shop_product_id']);
 
-                        if (! $product) {
-                            return null;
-                        }
+    //                     if (! $product) {
+    //                         return null;
+    //                     }
 
-                        return ProductResource::getUrl('edit', ['record' => $product]);
-                    }, shouldOpenInNewTab: true)
-                    ->hidden(fn(array $arguments, Repeater $component): bool => blank($component->getRawItemState($arguments['item'])['shop_product_id'])),
-            ])
-            ->orderColumn('sort')
-            ->defaultItems(1)
-            ->hiddenLabel()
-            ->columns([
-                'md' => 10,
-            ])
-            ->required();
-    }
+    //                     return ProductResource::getUrl('edit', ['record' => $product]);
+    //                 }, shouldOpenInNewTab: true)
+    //                 ->hidden(fn(array $arguments, Repeater $component): bool => blank($component->getRawItemState($arguments['item'])['shop_product_id'])),
+    //         ])
+    //         ->orderColumn('sort')
+    //         ->defaultItems(1)
+    //         ->hiddenLabel()
+    //         ->columns([
+    //             'md' => 10,
+    //         ])
+    //         ->required();
+    // }
 }
