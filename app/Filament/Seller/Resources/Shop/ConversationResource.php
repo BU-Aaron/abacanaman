@@ -91,4 +91,19 @@ class ConversationResource extends Resource
             'view' => ViewConversation::route('/{record}/view'),
         ];
     }
+
+    /**
+     * Override the Eloquent query to filter conversations by the authenticated seller.
+     *
+     * @return Builder
+     */
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->where(function (Builder $query) {
+                // Assuming Conversation has 'seller_id' field
+                $sellerId = Auth::user()->seller->id;
+                $query->where('seller_id', $sellerId);
+            });
+    }
 }

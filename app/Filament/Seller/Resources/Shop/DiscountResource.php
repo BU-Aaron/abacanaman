@@ -15,12 +15,13 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class DiscountResource extends Resource
 {
     protected static ?string $model = Discount::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-tag';
 
     protected static ?string $navigationGroup = 'Shop';
 
@@ -90,5 +91,19 @@ class DiscountResource extends Resource
             'create' => CreateDiscount::route('/create'),
             'edit' => EditDiscount::route('/{record}/edit'),
         ];
+    }
+
+    /**
+     * Override the Eloquent query to filter discounts by the authenticated seller's products.
+     *
+     * @return Builder
+     */
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->whereHas('product', function (Builder $query) {
+                $sellerId = Auth::user()->seller->id;
+                $query->where('seller_id', $sellerId);
+            });
     }
 }

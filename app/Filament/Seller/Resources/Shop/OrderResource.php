@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Squire\Models\Currency;
 
 class OrderResource extends Resource
@@ -197,7 +198,12 @@ class OrderResource extends Resource
     /** @return Builder<Order> */
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->withoutGlobalScope(SoftDeletingScope::class);
+        return parent::getEloquentQuery()
+            ->withoutGlobalScope(SoftDeletingScope::class)
+            ->whereHas('items.product', function (Builder $query) {
+                $sellerId = Auth::user()->seller->id;
+                $query->where('shop_products.seller_id', $sellerId);
+            });
     }
 
     public static function getGloballySearchableAttributes(): array
