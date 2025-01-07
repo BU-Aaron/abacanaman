@@ -15,6 +15,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class ConversationResource extends Resource
 {
@@ -44,13 +45,29 @@ class ConversationResource extends Resource
                     ->label('User')
                     ->searchable()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('latestMessage.content')
+                    ->label('Latest Message')
+                    ->limit(50)
+                    ->sortable()
+                    ->toggleable()
+                    ->wrap()
+                    ->getStateUsing(function (Conversation $record) {
+                        $message = $record->latestMessage;
+                        if ($message) {
+                            if ($message->sender_id === Auth::id()) {
+                                return "You: " . $message->content;
+                            }
+                            return $message->content;
+                        }
+                        return '';
+                    })
+                    ->html(),
+
             ])
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
+            ->actions([])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
