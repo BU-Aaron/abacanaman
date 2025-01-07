@@ -59,8 +59,8 @@ class PostResource extends Resource
                             ->required()
                             ->columnSpan('full'),
 
-                        Forms\Components\Select::make('blog_author_id')
-                            ->relationship('author', 'name')
+                        Forms\Components\Select::make('user_id')
+                            ->relationship('user', 'name')
                             ->searchable()
                             ->required(),
 
@@ -102,7 +102,7 @@ class PostResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
-                Tables\Columns\TextColumn::make('author.name')
+                Tables\Columns\TextColumn::make('user.name')
                     ->searchable()
                     ->sortable()
                     ->toggleable(),
@@ -124,7 +124,7 @@ class PostResource extends Resource
                     ->date(),
 
                 Tables\Columns\TextColumn::make('comments.user.name')
-                    ->label('Comment Authors')
+                    ->label('Comment users')
                     ->listWithLineBreaks()
                     ->limitList(2)
                     ->expandableLimitedList(),
@@ -196,7 +196,7 @@ class PostResource extends Resource
                                             ->color('success'),
                                     ]),
                                     Components\Group::make([
-                                        Components\TextEntry::make('author.name'),
+                                        Components\TextEntry::make('user.name'),
                                         Components\TextEntry::make('category.name'),
                                         Components\SpatieTagsEntry::make('tags'),
                                     ]),
@@ -245,12 +245,12 @@ class PostResource extends Resource
     /** @return Builder<Post> */
     public static function getGlobalSearchEloquentQuery(): Builder
     {
-        return parent::getGlobalSearchEloquentQuery()->with(['author', 'category']);
+        return parent::getGlobalSearchEloquentQuery()->with(['user', 'category']);
     }
 
     public static function getGloballySearchableAttributes(): array
     {
-        return ['title', 'slug', 'author.name', 'category.name'];
+        return ['title', 'slug', 'user.name', 'category.name'];
     }
 
     public static function getGlobalSearchResultDetails(Model $record): array
@@ -258,8 +258,8 @@ class PostResource extends Resource
         /** @var Post $record */
         $details = [];
 
-        if ($record->author) {
-            $details['Author'] = $record->author->name;
+        if ($record->user) {
+            $details['user'] = $record->user->name;
         }
 
         if ($record->category) {

@@ -26,7 +26,7 @@
                     <div class="flex items-center justify-between">
                         <a href="{{ route('blog.post', $post->slug) }}" class="text-amber-600 hover:text-amber-800 font-semibold">Read More</a>
                         <div class="text-sm text-gray-500 dark:text-gray-400">
-                            By {{ $post->author->name }} on {{ $post->published_at->format('M d, Y') }}
+                            By {{ $post->user->name }} on {{ $post->published_at->format('M d, Y') }}
                         </div>
                     </div>
                 </div>

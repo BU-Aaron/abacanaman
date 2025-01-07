@@ -25,7 +25,7 @@ class BlogPage extends Component
 
     public function render()
     {
-        $posts = Post::with(['author', 'category'])
+        $posts = Post::with(['user', 'category'])
             ->where('published_at', '<=', now())
             ->where(function ($query) {
                 $query->where('title', 'like', '%' . $this->search . '%')

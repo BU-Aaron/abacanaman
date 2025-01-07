@@ -3,6 +3,10 @@
 namespace App\Models\Blog;
 
 use App\Models\Comment;
+use App\Models\Shop\Category;
+use App\Models\Shop\Product;
+use App\Models\User;
+use App\Traits\Multitenantable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,8 +15,7 @@ use Spatie\Tags\HasTags;
 
 class Post extends Model
 {
-    use HasFactory;
-    use HasTags;
+    use HasFactory, HasTags, Multitenantable;
 
     /**
      * @var string
@@ -26,10 +29,10 @@ class Post extends Model
         'published_at' => 'date',
     ];
 
-    /** @return BelongsTo<Author,self> */
-    public function author(): BelongsTo
+    /** @return BelongsTo<User,self> */
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(Author::class, 'blog_author_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     /** @return BelongsTo<Category,self> */

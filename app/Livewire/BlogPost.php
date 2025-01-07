@@ -13,7 +13,7 @@ class BlogPost extends Component
     public function mount($slug)
     {
         $this->slug = $slug;
-        $this->post = Post::with(['author', 'category'])->where('slug', $slug)->firstOrFail();
+        $this->post = Post::with(['user', 'category'])->where('slug', $slug)->firstOrFail();
     }
 
     public function render()
