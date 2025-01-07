@@ -12,6 +12,7 @@ use Filament\Notifications\Notification;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Auth;
 
 class CommentsRelationManager extends RelationManager
 {
@@ -85,17 +86,17 @@ class CommentsRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make()
-                    ->after(function ($record) {
-                        /** @var User $user */
-                        $user = auth()->user();
+                // Tables\Actions\CreateAction::make()
+                //     ->after(function ($record) {
+                //         /** @var User $user */
+                //         $user = Auth::user();
 
-                        Notification::make()
-                            ->title('New comment')
-                            ->icon('heroicon-o-chat-bubble-bottom-center-text')
-                            ->body("**{$record->customer->name} commented on product ({$record->commentable->name}).**")
-                            ->sendToDatabase($user);
-                    }),
+                //         Notification::make()
+                //             ->title('New comment')
+                //             ->icon('heroicon-o-chat-bubble-bottom-center-text')
+                //             ->body("**{$record->user->name} commented on product ({$record->commentable->name}).**")
+                //             ->sendToDatabase($user);
+                //     }),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),

@@ -12,6 +12,7 @@ use Filament\Notifications\Notification;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Auth;
 
 class CommentsRelationManager extends RelationManager
 {
@@ -48,7 +49,8 @@ class CommentsRelationManager extends RelationManager
             ->columns(1)
             ->schema([
                 TextEntry::make('title'),
-                TextEntry::make('customer.name'),
+                TextEntry::make('user.name')
+                    ->label('Customer'),
                 IconEntry::make('is_visible')
                     ->label('Visibility'),
                 TextEntry::make('content')
@@ -65,7 +67,7 @@ class CommentsRelationManager extends RelationManager
                     ->searchable()
                     ->sortable(),
 
-                Tables\Columns\TextColumn::make('customer.name')
+                Tables\Columns\TextColumn::make('user.name')
                     ->label('Customer')
                     ->searchable()
                     ->sortable(),
@@ -78,21 +80,20 @@ class CommentsRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make()
-                    ->after(function ($record) {
-                        /** @var User $user */
-                        $user = auth()->user();
+                // Tables\Actions\CreateAction::make()
+                //     ->after(function ($record) {
+                //         /** @var User $user */
+                //         $user = Auth::user();
 
-                        Notification::make()
-                            ->title('New comment')
-                            ->icon('heroicon-o-chat-bubble-bottom-center-text')
-                            ->body("**{$record->customer->name} commented on product ({$record->commentable->name}).**")
-                            ->sendToDatabase($user);
-                    }),
+                //         Notification::make()
+                //             ->title('New comment')
+                //             ->icon('heroicon-o-chat-bubble-bottom-center-text')
+                //             ->body("**{$record->user->name} commented on product ({$record->commentable->name}).**")
+                //             ->sendToDatabase($user);
+                //     }),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->groupedBulkActions([
