@@ -3,8 +3,6 @@
 namespace App\Models\Blog;
 
 use App\Models\Comment;
-use App\Models\Shop\Category;
-use App\Models\Shop\Product;
 use App\Models\User;
 use App\Traits\Multitenantable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
