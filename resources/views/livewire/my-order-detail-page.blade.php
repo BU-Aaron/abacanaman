@@ -176,6 +176,18 @@
           @endif
         </div>
 
+        <!-- Action Buttons -->
+        <div class="flex space-x-4 mt-6">
+            @if($order->status->value !== 'delivered' && $order->status->value !== 'cancelled')
+                <button wire:click="confirmDelivered" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded">
+                    Confirm Delivered
+                </button>
+                <button wire:click="cancelOrder" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded">
+                    Cancel Order
+                </button>
+            @endif
+        </div>
+
       </div>
       <div class="md:w-1/4">
         <div class="bg-white rounded-lg shadow-md p-6">
