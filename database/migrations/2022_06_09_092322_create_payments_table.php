@@ -20,9 +20,11 @@ return new class extends Migration
 
             $table->string('method');
 
-            $table->decimal('amount');
+            $table->decimal('amount', 10, 2);
 
             $table->string('currency');
+
+            $table->string('receipt_image')->nullable();
 
             $table->timestamps();
         });

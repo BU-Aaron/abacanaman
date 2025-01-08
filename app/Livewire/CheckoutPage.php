@@ -6,16 +6,18 @@ use App\Helpers\CartManagement;
 use App\Mail\OrderPlaced;
 use App\Models\Shop\Order;
 use App\Models\Shop\OrderAddress;
+use App\Models\Shop\Payment;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Livewire\Attributes\Title;
 use Livewire\Component;
-use Stripe\Checkout\Session;
-use Stripe\Stripe;
+use Livewire\WithFileUploads;
 
 #[Title('Checkout')]
 class CheckoutPage extends Component
 {
+    use WithFileUploads;
+
     public $first_name;
     public $last_name;
     public $phone;
@@ -23,11 +25,14 @@ class CheckoutPage extends Component
     public $city;
     public $state;
     public $zip_code;
-    public $payment_method;
+    public $payment_method = 'cod';
+
+    public $gcash_reference;
+    public $gcash_receipt;
 
     public function placeOrder()
     {
-        $this->validate([
+        $rules = [
             'first_name' => 'required',
             'last_name' => 'required',
             'phone' => 'required',
@@ -36,7 +41,14 @@ class CheckoutPage extends Component
             'state' => 'required',
             'zip_code' => 'required',
             'payment_method' => 'required',
-        ]);
+        ];
+
+        if ($this->payment_method === 'gcash') {
+            $rules['gcash_reference'] = 'required|string|max:255';
+            $rules['gcash_receipt'] = 'required|image|max:2048';
+        }
+
+        $this->validate($rules);
 
         $cart_items = CartManagement::getCartItemsFromCookie();
 
@@ -59,11 +71,12 @@ class CheckoutPage extends Component
 
         $orderNumber = 'OR-' . strtoupper(uniqid());
 
-        // Create the Order
         $order = Order::create([
             'number' => $orderNumber,
             'user_id' => Auth::id(),
             'currency' => 'php',
+            'payment_method' => $this->payment_method,
+            'payment_status' => $this->payment_method === 'gcash' ? 'paid' : 'pending',
             'total_price' => CartManagement::calculateGrandTotal($cart_items),
             'status' => 'new',
             'shipping_method' => 'pickup',
@@ -71,7 +84,6 @@ class CheckoutPage extends Component
             'notes' => 'Order created by ' . Auth::user()->name,
         ]);
 
-        // Create the Order Address
         $orderAddress = new OrderAddress([
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
@@ -82,10 +94,8 @@ class CheckoutPage extends Component
             'zip_code' => $this->zip_code,
         ]);
 
-        // Associate the address with the order
         $order->address()->save($orderAddress);
 
-        // Create Order Items
         foreach ($cart_items as $item) {
             $order->items()->create([
                 'shop_product_id' => $item['product_id'],
@@ -94,18 +104,20 @@ class CheckoutPage extends Component
             ]);
         }
 
-        if ($this->payment_method === 'stripe') {
-            Stripe::setApikey(env('STRIPE_SECRET'));
-            $sessionCheckout = Session::create([
-                'payment_method_types' => ['card'],
-                'customer_email' => Auth::user()->email,
-                'line_items' => $line_items,
-                'mode' => 'payment',
-                'success_url' => route('success') . '?session_id={CHECKOUT_SESSION_ID}',
-                'cancel_url' => route('cancelled'),
+        if ($this->payment_method === 'gcash') {
+            $receiptPath = $this->gcash_receipt->store('gcash_receipts', 'public');
+
+            Payment::create([
+                'order_id' => $order->id,
+                'reference' => $this->gcash_reference,
+                'provider' => 'gcash',
+                'method' => 'manual',
+                'amount' => $order->total_price,
+                'currency' => 'php',
+                'receipt_image' => $receiptPath,
             ]);
 
-            $redirect_url = $sessionCheckout->url;
+            $redirect_url = route('success');
         } else {
             $redirect_url = route('success');
         }

@@ -90,36 +90,69 @@
 				<div class="text-lg font-semibold mb-4">
 					Select Payment Method
 				</div>
+
 				<ul class="grid w-full gap-6 md:grid-cols-2">
 					<li>
-						<input wire:model="payment_method" class="hidden peer" id="hosting-small" required="" type="radio" value="cod" />
-						<label class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-amber-500 peer-checked:border-amber-600 peer-checked:text-amber-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700" for="hosting-small">
+						<input wire:click="$set('payment_method', 'cod')" wire:model="payment_method" class="hidden peer" id="payment-cod" required type="radio" value="cod" />
+						<label class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-amber-500 peer-checked:border-amber-600 peer-checked:text-amber-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700" for="payment-cod">
 							<div class="block">
 								<div class="w-full text-lg font-semibold">
 									Cash on Delivery
 								</div>
 							</div>
-							<svg aria-hidden="true" class="w-5 h-5 ms-3 rtl:rotate-180" fill="none" viewbox="0 0 14 10" xmlns="http://www.w3.org/2000/svg">
+							<svg aria-hidden="true" class="w-5 h-5 ms-3 rtl:rotate-180" fill="none" viewBox="0 0 14 10" xmlns="http://www.w3.org/2000/svg">
 								<path d="M1 5h12m0 0L9 1m4 4L9 9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
 								</path>
 							</svg>
 						</label>
 					</li>
 					<li>
-						<input wire:model="payment_method" class="hidden peer" id="hosting-big" type="radio" value="stripe">
-						<label class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-amber-500 peer-checked:border-amber-600 peer-checked:text-amber-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700" for="hosting-big">
+						<input wire:click="$set('payment_method', 'gcash')" wire:model="payment_method" class="hidden peer" id="payment-gcash" type="radio" value="gcash">
+						<label class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-amber-500 peer-checked:border-amber-600 peer-checked:text-amber-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700" for="payment-gcash">
 							<div class="block">
 								<div class="w-full text-lg font-semibold">
-									Stripe
+									GCash
 								</div>
 							</div>
-							<svg aria-hidden="true" class="w-5 h-5 ms-3 rtl:rotate-180" fill="none" viewbox="0 0 14 10" xmlns="http://www.w3.org/2000/svg">
+							<svg aria-hidden="true" class="w-5 h-5 ms-3 rtl:rotate-180" fill="none" viewBox="0 0 14 10" xmlns="http://www.w3.org/2000/svg">
 								<path d="M1 5h12m0 0L9 1m4 4L9 9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
 								</path>
 							</svg>
 						</label>
 					</li>
 				</ul>
+
+				<!-- GCash Details Section -->
+				@if($payment_method === 'gcash')
+					<div class="mt-6 bg-slate-50 p-4 rounded-lg">
+						<h2 class="text-xl font-bold mb-4">GCash Payment Details</h2>
+						<div class="mb-4">
+							<label class="block text-gray-700 dark:text-white mb-2" for="gcash_reference">
+								Reference Number
+							</label>
+							<input wire:model="gcash_reference" class="w-full rounded-lg border py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none" id="gcash_reference" type="text">
+							@error('gcash_reference')
+								<span class="text-red-500 text-sm">{{ $message }}</span>
+							@enderror
+						</div>
+						<div class="mb-4">
+							<label class="block text-gray-700 dark:text-white mb-2" for="gcash_receipt">
+								Upload Receipt Image
+							</label>
+							<input wire:model="gcash_receipt" class="w-full" id="gcash_receipt" type="file" accept="image/*">
+							@error('gcash_receipt')
+								<span class="text-red-500 text-sm">{{ $message }}</span>
+							@enderror
+
+							@if ($gcash_receipt)
+								<div class="mt-2">
+									<img src="{{ $gcash_receipt->temporaryUrl() }}" alt="Receipt Preview" class="w-32 h-32 object-cover rounded">
+								</div>
+							@endif
+						</div>
+					</div>
+				@endif
+
                 @error('payment_method')
                     <span class="text-red-500 text-sm">{{ $message }}</span>
                 @enderror

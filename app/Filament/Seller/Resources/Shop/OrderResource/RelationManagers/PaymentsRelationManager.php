@@ -60,6 +60,9 @@ class PaymentsRelationManager extends RelationManager
             ->columns([
                 Tables\Columns\ColumnGroup::make('Details')
                     ->columns([
+                        Tables\Columns\ImageColumn::make('receipt_image')
+                            ->label('Receipt Image'),
+
                         Tables\Columns\TextColumn::make('reference')
                             ->searchable(),
 

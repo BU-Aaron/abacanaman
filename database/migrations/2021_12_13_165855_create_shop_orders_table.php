@@ -20,6 +20,8 @@ return new class extends Migration
             $table->decimal('total_price', 12, 2)->nullable();
             $table->enum('status', ['new', 'processing', 'shipped', 'delivered', 'cancelled'])->default('new');
             $table->string('currency');
+            $table->string('payment_method');
+            $table->string('payment_status');
             $table->decimal('shipping_price')->nullable();
             $table->string('shipping_method')->nullable();
             $table->text('notes')->nullable();

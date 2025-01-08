@@ -93,6 +93,9 @@ class OrderResource extends Resource
                     ->toggleable(),
                 Tables\Columns\TextColumn::make('status')
                     ->badge(),
+                Tables\Columns\TextColumn::make('payment_status')
+                    ->label('Payment')
+                    ->badge(),
                 Tables\Columns\TextColumn::make('currency')
                     ->getStateUsing(fn($record): ?string => Currency::find($record->currency)?->name ?? null)
                     ->searchable()
@@ -175,7 +178,7 @@ class OrderResource extends Resource
     public static function getRelations(): array
     {
         return [
-            // RelationManagers\PaymentsRelationManager::class,
+            RelationManagers\PaymentsRelationManager::class,
             RelationManagers\OrderItemsRelationManager::class,
         ];
     }
@@ -285,6 +288,13 @@ class OrderResource extends Resource
             Forms\Components\ToggleButtons::make('status')
                 ->inline()
                 ->options(OrderStatus::class)
+                ->required(),
+
+            Forms\Components\Select::make('payment_status')
+                ->options([
+                    'paid' => 'Paid',
+                    'pending' => 'Pending',
+                ])
                 ->required(),
 
             Forms\Components\Select::make('currency')
