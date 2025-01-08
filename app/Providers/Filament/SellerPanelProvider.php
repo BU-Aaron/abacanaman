@@ -26,7 +26,7 @@ class SellerPanelProvider extends PanelProvider
         return $panel
             ->id('seller')
             ->path('seller')
-            ->brandLogo(fn() => view('filament.app.logo'))
+            ->brandLogo(fn() => view('filament.app.logo.seller'))
             ->login()
             ->profile()
             ->registration(Registration::class)
