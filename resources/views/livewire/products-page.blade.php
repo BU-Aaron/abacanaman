@@ -11,7 +11,7 @@
                         <li class="mb-4" wire:key="{{ $seller->id }}">
                             <label for="seller_{{ $seller->id }}" class="flex items-center dark:text-gray-300">
                                 <input type="checkbox" wire:model.live="selected_sellers" id="seller_{{ $seller->id }}" value="{{ $seller->id }}" class="w-4 h-4 mr-2">
-                                <span class="text-lg dark:text-gray-400">{{ $seller->store_name }}</span>
+                                <span class="text-lg dark:text-gray-400">{{ $seller->user->name }}</span>
                             </label>
                         </li>
                     @endforeach
