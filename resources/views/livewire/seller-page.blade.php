@@ -6,7 +6,7 @@
         @else
             <img src="https://placehold.co/600x400" alt="{{ $seller->store_name }}" class="w-32 h-32 mb-4 rounded-full object-cover">
         @endif
-        <h2 class="text-3xl font-bold dark:text-gray-200">{{ $seller->store_name }}</h2>
+        <h2 class="text-3xl font-bold dark:text-gray-200">{{ $seller->user->name }}</h2>
         <p class="text-gray-600 dark:text-gray-400 mt-2">{{ $seller->store_description }}</p>
         <p class="text-gray-600 dark:text-gray-400 mt-2">Contact: {{ $seller->contact_number ?? 'N/A' }}</p>
         <div class="mt-4">

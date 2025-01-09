@@ -100,7 +100,7 @@
                 </a>
                 <div class="p-5 text-center">
                   <a href="{{ route('seller.page', $seller->id) }}" class="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-300">
-                    {{ $seller->store_name }}
+                    {{ $seller->user->name }}
                   </a>
                 </div>
               </div>
