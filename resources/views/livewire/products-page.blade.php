@@ -67,9 +67,9 @@
                             <h3 class="text-lg font-semibold dark:text-gray-400">{{ $product->name }}</h3>
                             <p class="text-xl">
                                 <span class="text-green-600 dark:text-green-600">PHP {{ number_format($product->price, 2) }}</span>
-                                @if($product->old_price)
+                                {{-- @if($product->old_price)
                                     <span class="text-base font-normal text-gray-500 line-through dark:text-gray-400">PHP {{ number_format($product->old_price, 2) }}</span>
-                                @endif
+                                @endif --}}
                             </p>
                             <div class="mt-2">
                                 <a href="{{ route('seller.page', $product->seller->id) }}" class="text-amber-500 hover:underline">View Seller</a>

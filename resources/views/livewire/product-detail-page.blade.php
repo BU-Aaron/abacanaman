@@ -35,9 +35,9 @@
                 <h2 class="max-w-xl mb-6 text-2xl font-bold dark:text-gray-400 md:text-4xl">{{ $product->name }}</h2>
                 <p class="inline-block mb-6 text-4xl font-bold text-gray-700 dark:text-gray-400 ">
                   <span>PHP {{ number_format($product->price, 2) }}</span>
-                  @if($product->old_price)
+                  {{-- @if($product->old_price)
                     <span class="text-base font-normal text-gray-500 line-through dark:text-gray-400">PHP {{ number_format($product->old_price, 2) }}</span>
-                  @endif
+                  @endif --}}
                 </p>
                 <p class="max-w-md text-gray-700 dark:text-gray-400">
                   {!! $product->description !!}
