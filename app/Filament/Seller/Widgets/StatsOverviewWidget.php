@@ -51,7 +51,7 @@ class StatsOverviewWidget extends BaseWidget
         };
 
         return [
-            Stat::make('Revenue', '$' . $formatNumber($revenue))
+            Stat::make('Revenue', 'PHP' . $formatNumber($revenue))
                 ->description('32k increase')
                 ->descriptionIcon('heroicon-m-arrow-trending-up')
                 ->chart([7, 2, 10, 3, 15, 4, 17])
