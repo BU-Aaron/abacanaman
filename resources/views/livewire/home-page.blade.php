@@ -25,7 +25,7 @@
                 <!-- End Col -->
 
                 <div class="relative ms-4">
-                    <img class="w-full rounded-md" src="{{ asset('images/raw-abaca.jpg') }}" alt="Image Description">
+                    <img class="w-full rounded-md" src="{{ asset('images/abaca-hero-image.jpg') }}" alt="Image Description">
                 </div>
                 <!-- End Col -->
             </div>
