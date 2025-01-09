@@ -1,6 +1,6 @@
 <div>
 
-    <div class="w-full mb-12 bg-gradient-to-r from-amber-200 to-cyan-200 py-20 px-4 sm:px-6 lg:px-8 mx-auto">
+    <div class="w-full bg-gradient-to-r from-amber-200 to-cyan-200 py-20 px-4 sm:px-6 lg:px-8 mx-auto">
         <div class="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Grid -->
             <div class="grid md:grid-cols-2 gap-4 md:gap-8 xl:gap-20 md:items-center">
@@ -33,7 +33,38 @@
         </div>
     </div>
 
+<!-- Are You a Buyer or a Seller Section Start -->
+<div class="w-full py-20 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-gray-900 ">
+    <div class="max-w-xl mx-auto text-center">
+        <div class="text-center ">
+            <div class="relative flex flex-col items-center">
+              <h1 class="text-5xl font-bold dark:text-gray-200"> Are you a <span class="text-amber-500"> Buyer </span> or <span class="text-amber-500"> Seller?
+                </span> </h1>
+              <div class="flex w-40 mt-2 mb-6 overflow-hidden rounded">
+                <div class="flex-1 h-2 bg-amber-200">
+                </div>
+                <div class="flex-1 h-2 bg-amber-400">
+                </div>
+                <div class="flex-1 h-2 bg-amber-600">
+                </div>
+              </div>
+            </div>
+            <p class="mb-12 text-base text-center text-gray-500">
+                Whether you're looking to purchase eco-friendly abaca products or want to sell your own creations, we've got you covered.
+            </p>
+          </div>
+        <div class="flex justify-center space-x-4">
+            <a href="/login" class="py-3 px-6 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition flex items-center">
+                <i class="fas fa-shopping-cart mr-2"></i> I'm a Buyer
+            </a>
+            <a href="/seller/login" class="py-3 px-6 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center">
+                <i class="fas fa-store mr-2"></i> I'm a Seller
+            </a>
 
+        </div>
+    </div>
+</div>
+<!-- Are You a Buyer or a Seller Section End -->
 
     {{-- Sellers Section Start --}}
 
