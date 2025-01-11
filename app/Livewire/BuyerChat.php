@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Shop\Conversation;
 use App\Models\Shop\Message;
+use App\Models\Shop\Seller;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,7 +14,7 @@ class BuyerChat extends Component
     public $conversation;
     public $messages = [];
     public $newMessage;
-
+    public $seller;
     public function mount($seller_id)
     {
         $this->seller_id = $seller_id;
@@ -22,6 +23,7 @@ class BuyerChat extends Component
         );
         // Convert Collection to Array
         $this->messages = $this->conversation->messages()->with('sender')->get()->toArray();
+        $this->seller = Seller::with('user')->findOrFail($seller_id);
     }
 
     public function sendMessage()
@@ -42,6 +44,8 @@ class BuyerChat extends Component
 
     public function render()
     {
-        return view('livewire.buyer-chat');
+        return view('livewire.buyer-chat', [
+            'seller' => $this->seller,
+        ]);
     }
 }

@@ -13,7 +13,7 @@
         {{-- @livewireStyles --}}
 
     </head>
-    <body class="bg-gray-100 dark:bg-gray-800">
+    <body class="bg-gray-50">
 
         @livewire('partials.navbar')
 
