@@ -30,6 +30,21 @@ class CheckoutPage extends Component
     public $gcash_reference;
     public $gcash_receipt;
 
+    public function mount()
+    {
+        $user = Auth::user();
+
+        if ($user) {
+            // Split the user's name into first and last names
+            $nameParts = explode(' ', $user->name, 2);
+            $this->first_name = $nameParts[0] ?? '';
+            $this->last_name = $nameParts[1] ?? '';
+        }
+
+        $cart_items = CartManagement::getCartItemsFromCookie();
+        // You can also initialize other properties if needed
+    }
+
     public function placeOrder()
     {
         $rules = [
