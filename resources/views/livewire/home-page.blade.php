@@ -90,25 +90,27 @@
           </div>
         </div>
         <div class="justify-center max-w-6xl px-4 py-4 mx-auto lg:py-0">
-          <div class="grid grid-cols-1 gap-6 lg:grid-cols-4 md:grid-cols-2">
-
-            @foreach ($sellers as $seller)
-
-              <div class="bg-white rounded-lg shadow-md dark:bg-gray-800" wire:key="{{ $seller->id }}">
-                <a href="{{ route('seller.page', $seller->id) }}" class="">
-                  <img src="https://placehold.co/600x400" alt="{{ $seller->store_name }}" class="object-cover w-full h-64 rounded-t-lg">
+            <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-8 xl:gap-20 md:items-center">
+              @foreach ($sellers as $seller)
+                <a href="{{ route('seller.page', $seller->id) }}"
+                   class="text-center p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                  <div class="relative flex flex-col items-center">
+                    @if($seller->store_logo)
+                      <img src="{{ Storage::url($seller->store_logo) }}"
+                           alt="{{ $seller->store_name }}"
+                           class="w-32 h-32 mb-4 rounded-full object-cover">
+                    @else
+                      <img src="https://placehold.co/600x400"
+                           alt="{{ $seller->store_name }}"
+                           class="w-32 h-32 mb-4 rounded-full object-cover">
+                    @endif
+                    <h3 class="text-lg font-semibold dark:text-gray-200">{{ $seller->store_name }}</h3>
+                    <p class="text-gray-600 dark:text-gray-400">{{ $seller->store_description }}</p>
+                  </div>
                 </a>
-                <div class="p-5 text-center">
-                  <a href="{{ route('seller.page', $seller->id) }}" class="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-300">
-                    {{ $seller->user->name }}
-                  </a>
-                </div>
-              </div>
-
-            @endforeach
-
+              @endforeach
+            </div>
           </div>
-        </div>
     </section>
 
     {{-- Sellers Section End --}}

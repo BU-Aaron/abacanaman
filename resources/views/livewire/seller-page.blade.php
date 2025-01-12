@@ -2,7 +2,7 @@
     <!-- Seller Details -->
     <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md flex flex-col items-center">
         @if($seller->store_logo)
-            <img src="https://placehold.co/600x400" alt="{{ $seller->store_name }}" class="w-32 h-32 mb-4 rounded-full object-cover">
+            <img src="{{ Storage::url($seller->store_logo) }}" alt="{{ $seller->store_name }}" class="w-32 h-32 mb-4 rounded-full object-cover">
         @else
             <img src="https://placehold.co/600x400" alt="{{ $seller->store_name }}" class="w-32 h-32 mb-4 rounded-full object-cover">
         @endif
