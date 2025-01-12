@@ -63,7 +63,7 @@ class ProductsPage extends Component
 
         $sellers = Seller::with('user')->whereHas('user', function ($query) {
             $query->where('role', 'seller');
-        })->get(['id', 'store_name', 'user_id']);
+        })->where('is_verified', 1)->get(['id', 'store_name', 'user_id']);
 
         $categories = Category::where('is_visible', true)->get(['id', 'name', 'slug']);
 

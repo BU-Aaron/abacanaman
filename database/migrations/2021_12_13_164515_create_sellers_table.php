@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('state')->nullable();
             $table->string('zip_code')->nullable();
             $table->string('country')->nullable();
+            $table->string('document_proof')->nullable();
             $table->boolean('is_verified')->default(false);
             $table->timestamps();
         });

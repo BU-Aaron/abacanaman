@@ -18,7 +18,15 @@ class Seller extends Model
         'store_description',
         'store_logo',
         'contact_number',
+        'document_proof',
         'is_verified',
+    ];
+
+    /**
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'is_verified' => 'boolean',
     ];
 
     /**

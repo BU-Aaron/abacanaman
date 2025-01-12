@@ -20,7 +20,8 @@ class HomePage extends Component
     public function render()
     {
         // Fetch active sellers, ensuring at least 6
-        $this->sellers = Seller::take(6)->get();
+        //  if verified
+        $this->sellers = Seller::take(6)->where('is_verified', 1)->get();
 
         // Fetch active categories
         $this->categories = Category::where('is_visible', 1)->get();

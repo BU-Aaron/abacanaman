@@ -45,6 +45,14 @@ class Registration extends Register
                                 ->directory('store-logos')
                                 ->maxSize(5120),
 
+                            FileUpload::make('document_proof')
+                                ->label('Business Document')
+                                ->image()
+                                ->directory('seller-documents')
+                                ->maxSize(5120)
+                                ->required()
+                                ->helperText('Upload a valid image document (e.g., Business License).'),
+
                             Textarea::make('store_description')
                                 ->label('About Your Store')
                                 ->required()
@@ -115,6 +123,7 @@ class Registration extends Register
             'city' => $data['city'],
             'state' => $data['state'],
             'zip_code' => $data['zip_code'],
+            'document_proof' => $data['document_proof'] ?? null,
         ]);
 
         return $user;
