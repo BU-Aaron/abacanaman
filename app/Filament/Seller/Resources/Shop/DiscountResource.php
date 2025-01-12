@@ -35,6 +35,7 @@ class DiscountResource extends Resource
             ->schema([
                 Forms\Components\Select::make('shop_product_id')
                     ->label('Product')
+                    ->preload()
                     ->relationship('product', 'name')
                     ->searchable()
                     ->required(),

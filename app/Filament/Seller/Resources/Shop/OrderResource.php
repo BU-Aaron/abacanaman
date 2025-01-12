@@ -201,19 +201,19 @@ class OrderResource extends Resource
             });
     }
 
-    public static function getGloballySearchableAttributes(): array
-    {
-        return ['number', 'customer.name'];
-    }
+    // public static function getGloballySearchableAttributes(): array
+    // {
+    //     return ['number', 'customer.name'];
+    // }
 
-    public static function getGlobalSearchResultDetails(Model $record): array
-    {
-        /** @var Order $record */
+    // public static function getGlobalSearchResultDetails(Model $record): array
+    // {
+    //     /** @var Order $record */
 
-        return [
-            'Customer' => optional($record->customer)->name,
-        ];
-    }
+    //     return [
+    //         'Customer' => optional($record->customer)->name,
+    //     ];
+    // }
 
     /** @return Builder<Order> */
     public static function getGlobalSearchEloquentQuery(): Builder

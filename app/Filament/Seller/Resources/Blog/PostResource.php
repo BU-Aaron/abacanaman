@@ -59,12 +59,8 @@ class PostResource extends Resource
                             ->required()
                             ->columnSpan('full'),
 
-                        Forms\Components\Select::make('user_id')
-                            ->relationship('user', 'name')
-                            ->searchable()
-                            ->required(),
-
                         Forms\Components\Select::make('blog_category_id')
+                            ->preload()
                             ->relationship('category', 'name')
                             ->searchable(),
                         // ->required(),
