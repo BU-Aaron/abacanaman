@@ -85,33 +85,32 @@ class ProductResource extends Resource
                                     ->rules(['regex:/^\d{1,6}(\.\d{0,2})?$/'])
                                     ->required(),
 
-                                Forms\Components\TextInput::make('old_price')
-                                    ->label('Compare at price')
-                                    ->numeric()
-                                    ->rules(['regex:/^\d{1,6}(\.\d{0,2})?$/'])
-                                    ->required(),
+                                // Forms\Components\TextInput::make('old_price')
+                                //     ->label('Compare at price')
+                                //     ->numeric()
+                                //     ->rules(['regex:/^\d{1,6}(\.\d{0,2})?$/'])
+                                //     ->required(),
 
-                                Forms\Components\TextInput::make('cost')
-                                    ->label('Cost per item')
-                                    ->helperText('Customers won\'t see this price.')
-                                    ->numeric()
-                                    ->rules(['regex:/^\d{1,6}(\.\d{0,2})?$/'])
-                                    ->required(),
-                            ])
-                            ->columns(2),
+                                // Forms\Components\TextInput::make('cost')
+                                //     ->label('Cost per item')
+                                //     ->helperText('Customers won\'t see this price.')
+                                //     ->numeric()
+                                //     ->rules(['regex:/^\d{1,6}(\.\d{0,2})?$/'])
+                                //     ->required(),
+                            ]),
                         Forms\Components\Section::make('Inventory')
                             ->schema([
-                                Forms\Components\TextInput::make('sku')
-                                    ->label('SKU (Stock Keeping Unit)')
-                                    ->unique(Product::class, 'sku', ignoreRecord: true)
-                                    ->maxLength(255)
-                                    ->required(),
+                                // Forms\Components\TextInput::make('sku')
+                                //     ->label('SKU (Stock Keeping Unit)')
+                                //     ->unique(Product::class, 'sku', ignoreRecord: true)
+                                //     ->maxLength(255)
+                                //     ->required(),
 
-                                Forms\Components\TextInput::make('barcode')
-                                    ->label('Barcode (ISBN, UPC, GTIN, etc.)')
-                                    ->unique(Product::class, 'barcode', ignoreRecord: true)
-                                    ->maxLength(255)
-                                    ->required(),
+                                // Forms\Components\TextInput::make('barcode')
+                                //     ->label('Barcode (ISBN, UPC, GTIN, etc.)')
+                                //     ->unique(Product::class, 'barcode', ignoreRecord: true)
+                                //     ->maxLength(255)
+                                //     ->required(),
 
                                 Forms\Components\TextInput::make('qty')
                                     ->label('Quantity')
@@ -119,11 +118,11 @@ class ProductResource extends Resource
                                     ->rules(['integer', 'min:0'])
                                     ->required(),
 
-                                Forms\Components\TextInput::make('security_stock')
-                                    ->helperText('The safety stock is the limit stock for your products which alerts you if the product stock will soon be out of stock.')
-                                    ->numeric()
-                                    ->rules(['integer', 'min:0'])
-                                    ->required(),
+                                // Forms\Components\TextInput::make('security_stock')
+                                //     ->helperText('The safety stock is the limit stock for your products which alerts you if the product stock will soon be out of stock.')
+                                //     ->numeric()
+                                //     ->rules(['integer', 'min:0'])
+                                //     ->required(),
                             ])
                             ->columns(2),
 
@@ -141,26 +140,8 @@ class ProductResource extends Resource
 
                 Forms\Components\Group::make()
                     ->schema([
-                        Forms\Components\Section::make('Status')
-                            ->schema([
-                                Forms\Components\Toggle::make('is_visible')
-                                    ->label('Visible')
-                                    ->helperText('This product will be hidden from all sales channels.')
-                                    ->default(true),
-
-                                Forms\Components\DatePicker::make('published_at')
-                                    ->label('Availability')
-                                    ->default(now())
-                                    ->required(),
-                            ]),
-
                         Forms\Components\Section::make('Associations')
                             ->schema([
-                                Forms\Components\Select::make('shop_brand_id')
-                                    ->relationship('brand', 'name')
-                                    ->searchable()
-                                    ->hiddenOn(ProductsRelationManager::class),
-
                                 Forms\Components\Select::make('categories')
                                     ->relationship('categories', 'name')
                                     ->preload()
