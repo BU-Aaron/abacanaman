@@ -32,7 +32,7 @@ class CustomersChart extends ChartWidget
 
         // Query to get unique buyers count per month for this seller's products
         $buyerCounts = Order::select(
-            DB::raw("strftime('%Y-%m', created_at) as month"),
+            DB::raw($this->getMonthFormatting()),
             DB::raw('COUNT(DISTINCT user_id) as buyer_count')
         )
             ->whereHas('items.product', function ($query) use ($seller) {
@@ -60,5 +60,18 @@ class CustomersChart extends ChartWidget
             ],
             'labels' => $months->map(fn($month) => $month->format('M'))->toArray(),
         ];
+    }
+
+    protected function getMonthFormatting(): string
+    {
+        // Check the database driver
+        $driver = config('database.default');
+
+        return match ($driver) {
+            'sqlite' => "strftime('%Y-%m', created_at) as month",
+            'mysql' => "DATE_FORMAT(created_at, '%Y-%m') as month",
+            'pgsql' => "to_char(created_at, 'YYYY-MM') as month",
+            default => "DATE_FORMAT(created_at, '%Y-%m') as month",
+        };
     }
 }

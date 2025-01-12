@@ -35,7 +35,7 @@ class OrdersChart extends ChartWidget
             $query->where('shop_products.seller_id', $seller->id);
         })
             ->select(
-                DB::raw("strftime('%Y-%m', created_at) as month"),
+                DB::raw($this->getMonthFormatting()),
                 DB::raw('COUNT(*) as total')
             )
             ->where('created_at', '>=', now()->subMonths(11)->startOfMonth())
@@ -60,5 +60,18 @@ class OrdersChart extends ChartWidget
             ],
             'labels' => $months->map(fn($month) => $month->format('M'))->toArray(),
         ];
+    }
+
+    protected function getMonthFormatting(): string
+    {
+        // Check the database driver
+        $driver = config('database.default');
+
+        return match ($driver) {
+            'sqlite' => "strftime('%Y-%m', created_at) as month",
+            'mysql' => "DATE_FORMAT(created_at, '%Y-%m') as month",
+            'pgsql' => "to_char(created_at, 'YYYY-MM') as month",
+            default => "DATE_FORMAT(created_at, '%Y-%m') as month",
+        };
     }
 }
