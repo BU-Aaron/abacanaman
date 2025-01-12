@@ -40,13 +40,6 @@ class AddressForm extends Forms\Components\Field
     public function getChildComponents(): array
     {
         return [
-            Forms\Components\Grid::make()
-                ->schema([
-                    Forms\Components\Select::make('country')
-                        ->searchable()
-                        ->getSearchResultsUsing(fn(string $query) => Country::where('name', 'like', "%{$query}%")->pluck('name', 'id'))
-                        ->getOptionLabelUsing(fn($value): ?string => Country::firstWhere('id', $value)?->getAttribute('name')),
-                ]),
             Forms\Components\TextInput::make('street_address')
                 ->label('Street address')
                 ->maxLength(255),
@@ -72,7 +65,6 @@ class AddressForm extends Forms\Components\Field
             $address = $record?->getRelationValue($this->getRelationship());
 
             $component->state($address ? $address->toArray() : [
-                'country' => null,
                 'street' => null,
                 'city' => null,
                 'state' => null,

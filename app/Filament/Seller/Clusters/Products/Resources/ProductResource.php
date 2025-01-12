@@ -163,6 +163,7 @@ class ProductResource extends Resource
 
                                 Forms\Components\Select::make('categories')
                                     ->relationship('categories', 'name')
+                                    ->preload()
                                     ->multiple()
                                     ->required(),
                             ]),

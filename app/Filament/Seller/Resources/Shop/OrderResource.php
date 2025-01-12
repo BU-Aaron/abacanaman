@@ -3,16 +3,13 @@
 namespace App\Filament\Seller\Resources\Shop;
 
 use App\Enums\OrderStatus;
-use App\Filament\Seller\Clusters\Products\Resources\ProductResource;
 use App\Filament\Seller\Resources\Shop\OrderResource\Pages;
 use App\Filament\Seller\Resources\Shop\OrderResource\RelationManagers;
 use App\Filament\Seller\Resources\Shop\OrderResource\Widgets\OrderStats;
 use App\Forms\Components\AddressForm;
 use App\Models\Shop\Order;
-use App\Models\Shop\Product;
 use Filament\Forms;
 use Filament\Forms\Components\Actions\Action;
-use Filament\Forms\Components\Repeater;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
@@ -23,7 +20,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Squire\Models\Currency;
 
 class OrderResource extends Resource
 {
@@ -96,11 +92,6 @@ class OrderResource extends Resource
                 Tables\Columns\TextColumn::make('payment_status')
                     ->label('Payment')
                     ->badge(),
-                Tables\Columns\TextColumn::make('currency')
-                    ->getStateUsing(fn($record): ?string => Currency::find($record->currency)?->name ?? null)
-                    ->searchable()
-                    ->sortable()
-                    ->toggleable(),
                 Tables\Columns\TextColumn::make('total_price')
                     ->searchable()
                     ->sortable()
@@ -252,8 +243,8 @@ class OrderResource extends Resource
 
             Forms\Components\Select::make('user_id')
                 ->relationship('user', 'name')
-                ->searchable()
-                ->required()
+                ->label('Customer')
+                ->disabled()
                 ->createOptionForm([
                     Forms\Components\TextInput::make('name')
                         ->required()
@@ -290,18 +281,8 @@ class OrderResource extends Resource
                 ->options(OrderStatus::class)
                 ->required(),
 
-            Forms\Components\Select::make('payment_status')
-                ->options([
-                    'paid' => 'Paid',
-                    'pending' => 'Pending',
-                ])
-                ->required(),
-
-            Forms\Components\Select::make('currency')
-                ->searchable()
-                ->getSearchResultsUsing(fn(string $query) => Currency::where('name', 'like', "%{$query}%")->pluck('name', 'id'))
-                ->getOptionLabelUsing(fn($value): ?string => Currency::firstWhere('id', $value)?->getAttribute('name'))
-                ->required(),
+            Forms\Components\TextInput::make('payment_status')
+                ->disabled(),
 
             AddressForm::make('address')
                 ->columnSpan('full'),

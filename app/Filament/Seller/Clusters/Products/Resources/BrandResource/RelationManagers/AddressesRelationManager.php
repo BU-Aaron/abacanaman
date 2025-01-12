@@ -26,11 +26,6 @@ class AddressesRelationManager extends RelationManager
                 Forms\Components\TextInput::make('city'),
 
                 Forms\Components\TextInput::make('state'),
-
-                Forms\Components\Select::make('country')
-                    ->searchable()
-                    ->getSearchResultsUsing(fn(string $query) => Country::where('name', 'like', "%{$query}%")->pluck('name', 'id'))
-                    ->getOptionLabelUsing(fn($value): ?string => Country::firstWhere('id', $value)?->getAttribute('name')),
             ]);
     }
 
