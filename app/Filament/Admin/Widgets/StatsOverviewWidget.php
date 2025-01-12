@@ -2,11 +2,15 @@
 
 namespace App\Filament\Admin\Widgets;
 
+use App\Models\Shop\Order;
+use App\Models\User;
 use Carbon\Carbon;
 use Filament\Widgets\Concerns\InteractsWithPageFilters;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
-use Illuminate\Support\Number;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class StatsOverviewWidget extends BaseWidget
 {
@@ -16,7 +20,7 @@ class StatsOverviewWidget extends BaseWidget
 
     protected function getStats(): array
     {
-
+        // Retrieve filter dates
         $startDate = ! is_null($this->filters['startDate'] ?? null) ?
             Carbon::parse($this->filters['startDate']) :
             null;
@@ -25,47 +29,130 @@ class StatsOverviewWidget extends BaseWidget
             Carbon::parse($this->filters['endDate']) :
             now();
 
+        // Business Customers Only filter
         $isBusinessCustomersOnly = $this->filters['businessCustomersOnly'] ?? null;
+
+        // Adjust multiplier based on filter
         $businessCustomerMultiplier = match (true) {
             boolval($isBusinessCustomersOnly) => 2 / 3,
             blank($isBusinessCustomersOnly) => 1,
             default => 1 / 3,
         };
 
-        $diffInDays = $startDate ? $startDate->diffInDays($endDate) : 0;
+        // Build the base query for orders
+        $ordersQuery = Order::query();
 
-        $revenue = (int) (($startDate ? ($diffInDays * 137) : 192100) * $businessCustomerMultiplier);
-        $newCustomers = (int) (($startDate ? ($diffInDays * 7) : 1340) * $businessCustomerMultiplier);
-        $newOrders = (int) (($startDate ? ($diffInDays * 13) : 3543) * $businessCustomerMultiplier);
+        // Apply date filters if available
+        if ($startDate) {
+            $ordersQuery->whereDate('created_at', '>=', $startDate);
+        }
 
+        if ($endDate) {
+            $ordersQuery->whereDate('created_at', '<=', $endDate);
+        }
+
+        // Apply business customers filter
+        if (boolval($isBusinessCustomersOnly)) {
+            $ordersQuery->whereHas('user', function ($query) {
+                $query->where('is_business', true);
+            });
+        }
+
+        // Calculate Revenue
+        $revenue = $ordersQuery->sum('total_price') * $businessCustomerMultiplier;
+
+        // Calculate New Customers (distinct user_id)
+        $newCustomers = $ordersQuery->distinct('user_id')->count('user_id') * $businessCustomerMultiplier;
+
+        // Calculate New Orders
+        $newOrders = $ordersQuery->count() * $businessCustomerMultiplier;
+
+        // Format numbers
         $formatNumber = function (int $number): string {
             if ($number < 1000) {
-                return (string) Number::format($number, 0);
+                return (string) number_format($number, 0);
             }
 
             if ($number < 1000000) {
-                return Number::format($number / 1000, 2) . 'k';
+                return number_format($number / 1000, 2) . 'k';
             }
 
-            return Number::format($number / 1000000, 2) . 'm';
+            return number_format($number / 1000000, 2) . 'm';
         };
 
         return [
-            Stat::make('Revenue', 'PHP' . ' ' . $formatNumber($revenue))
-                ->description('32k increase')
-                ->descriptionIcon('heroicon-m-arrow-trending-up')
-                ->chart([7, 2, 10, 3, 15, 4, 17])
-                ->color('success'),
-            Stat::make('New customers', $formatNumber($newCustomers))
-                ->description('3% decrease')
-                ->descriptionIcon('heroicon-m-arrow-trending-down')
-                ->chart([17, 16, 14, 15, 14, 13, 12])
-                ->color('danger'),
-            Stat::make('New orders', $formatNumber($newOrders))
-                ->description('7% increase')
-                ->descriptionIcon('heroicon-m-arrow-trending-up')
-                ->chart([15, 4, 10, 2, 12, 4, 12])
-                ->color('success'),
+            Stat::make('Total Revenue', 'PHP ' . $formatNumber($revenue))
+                ->description($revenue >= 0 ? 'Increase' : 'Decrease')
+                ->descriptionIcon($revenue >= 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
+                ->chart($this->getRevenueChartData($startDate, $endDate))
+                ->color($revenue >= 0 ? 'success' : 'danger'),
+
+            Stat::make('New Customers', $formatNumber($newCustomers))
+                ->description($newCustomers >= 0 ? 'Increase' : 'Decrease')
+                ->descriptionIcon($newCustomers >= 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
+                ->chart($this->getCustomersChartData($startDate, $endDate))
+                ->color($newCustomers >= 0 ? 'success' : 'danger'),
+
+            Stat::make('New Orders', $formatNumber($newOrders))
+                ->description($newOrders >= 0 ? 'Increase' : 'Decrease')
+                ->descriptionIcon($newOrders >= 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
+                ->chart($this->getOrdersChartData($startDate, $endDate))
+                ->color($newOrders >= 0 ? 'success' : 'danger'),
         ];
+    }
+
+    /**
+     * Get Revenue Chart Data
+     */
+    protected function getRevenueChartData(?Carbon $startDate, Carbon $endDate): array
+    {
+        $revenueData = Order::select(DB::raw("DATE(created_at) as date"), DB::raw('SUM(total_price) as daily_revenue'))
+            ->when($startDate, fn($query) => $query->whereDate('created_at', '>=', $startDate))
+            ->when($endDate, fn($query) => $query->whereDate('created_at', '<=', $endDate))
+            ->groupBy('date')
+            ->orderBy('date', 'asc')
+            ->pluck('daily_revenue', 'date')
+            ->toArray();
+
+        // Ensure the chart displays dates in order
+        ksort($revenueData);
+
+        return array_values($revenueData);
+    }
+
+    /**
+     * Get Customers Chart Data
+     */
+    protected function getCustomersChartData(?Carbon $startDate, Carbon $endDate): array
+    {
+        $customerData = Order::select(DB::raw("DATE(created_at) as date"), DB::raw('COUNT(DISTINCT user_id) as daily_customers'))
+            ->when($startDate, fn($query) => $query->whereDate('created_at', '>=', $startDate))
+            ->when($endDate, fn($query) => $query->whereDate('created_at', '<=', $endDate))
+            ->groupBy('date')
+            ->orderBy('date', 'asc')
+            ->pluck('daily_customers', 'date')
+            ->toArray();
+
+        ksort($customerData);
+
+        return array_values($customerData);
+    }
+
+    /**
+     * Get Orders Chart Data
+     */
+    protected function getOrdersChartData(?Carbon $startDate, Carbon $endDate): array
+    {
+        $orderData = Order::select(DB::raw("DATE(created_at) as date"), DB::raw('COUNT(*) as daily_orders'))
+            ->when($startDate, fn($query) => $query->whereDate('created_at', '>=', $startDate))
+            ->when($endDate, fn($query) => $query->whereDate('created_at', '<=', $endDate))
+            ->groupBy('date')
+            ->orderBy('date', 'asc')
+            ->pluck('daily_orders', 'date')
+            ->toArray();
+
+        ksort($orderData);
+
+        return array_values($orderData);
     }
 }
