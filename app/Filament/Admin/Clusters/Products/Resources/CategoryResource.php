@@ -17,13 +17,11 @@ class CategoryResource extends Resource
 {
     protected static ?string $model = Category::class;
 
-    protected static ?string $cluster = Products::class;
-
     protected static ?string $recordTitleAttribute = 'name';
 
-    protected static ?string $navigationIcon = 'heroicon-o-tag';
+    protected static ?string $navigationGroup = 'Shop';
 
-    protected static ?string $navigationParentItem = 'Products';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?int $navigationSort = 1;
 

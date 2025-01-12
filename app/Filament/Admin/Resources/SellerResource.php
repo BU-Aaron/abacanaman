@@ -27,7 +27,7 @@ class SellerResource extends Resource
 {
     protected static ?string $model = Seller::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-building-storefront';
 
     protected static ?string $navigationGroup = 'User Management';
 
