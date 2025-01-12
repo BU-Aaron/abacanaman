@@ -26,13 +26,15 @@ class ProductResource extends Resource
 {
     protected static ?string $model = Product::class;
 
-    protected static ?string $cluster = Products::class;
-
     protected static ?string $recordTitleAttribute = 'name';
+
+    protected static ?string $slug = 'shop/products';
 
     protected static ?string $navigationIcon = 'heroicon-o-bolt';
 
     protected static ?string $navigationLabel = 'Products';
+
+    protected static ?string $navigationGroup = 'Shop';
 
     protected static ?int $navigationSort = 0;
 
@@ -294,13 +296,5 @@ class ProductResource extends Resource
     public static function getGlobalSearchEloquentQuery(): Builder
     {
         return parent::getGlobalSearchEloquentQuery()->with(['brand']);
-    }
-
-    public static function getNavigationBadge(): ?string
-    {
-        /** @var class-string<Model> $modelClass */
-        $modelClass = static::$model;
-
-        return (string) $modelClass::whereColumn('qty', '<', 'security_stock')->count();
     }
 }
