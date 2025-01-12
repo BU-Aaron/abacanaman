@@ -206,14 +206,14 @@ class OrderResource extends Resource
     //     return ['number', 'customer.name'];
     // }
 
-    // public static function getGlobalSearchResultDetails(Model $record): array
-    // {
-    //     /** @var Order $record */
+    public static function getGlobalSearchResultDetails(Model $record): array
+    {
+        /** @var Order $record */
 
-    //     return [
-    //         'Customer' => optional($record->customer)->name,
-    //     ];
-    // }
+        return [
+            'Customer' => optional($record->user)->name,
+        ];
+    }
 
     /** @return Builder<Order> */
     public static function getGlobalSearchEloquentQuery(): Builder

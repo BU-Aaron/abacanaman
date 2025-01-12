@@ -272,7 +272,7 @@ class ProductResource extends Resource
         /** @var Product $record */
 
         return [
-            'Brand' => optional($record->brand)->name,
+            'Price' => 'PHP ' . number_format($record->price, 2),
         ];
     }
 

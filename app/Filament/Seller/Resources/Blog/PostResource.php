@@ -254,10 +254,6 @@ class PostResource extends Resource
         /** @var Post $record */
         $details = [];
 
-        if ($record->user) {
-            $details['user'] = $record->user->name;
-        }
-
         if ($record->category) {
             $details['Category'] = $record->category->name;
         }
