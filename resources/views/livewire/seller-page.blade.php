@@ -38,9 +38,6 @@
                         <h4 class="text-lg font-semibold dark:text-gray-400">{{ $product->name }}</h4>
                         <p class="text-xl">
                             <span class="text-green-600 dark:text-green-600">PHP {{ number_format($product->price, 2) }}</span>
-                            @if($product->old_price)
-                                <span class="text-base font-normal text-gray-500 line-through dark:text-gray-400">PHP {{ number_format($product->old_price, 2) }}</span>
-                            @endif
                         </p>
                     </div>
                     <div class="flex justify-center p-4 border-t border-gray-300 dark:border-gray-700">
