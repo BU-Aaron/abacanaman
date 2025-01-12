@@ -2,7 +2,11 @@
 
 namespace App\Filament\Seller\Widgets;
 
+use App\Models\Shop\Order;
+use Carbon\Carbon;
 use Filament\Widgets\ChartWidget;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class CustomersChart extends ChartWidget
 {
@@ -17,15 +21,44 @@ class CustomersChart extends ChartWidget
 
     protected function getData(): array
     {
+        // Get the current authenticated seller
+        $seller = Auth::user()->seller;
+
+        // Get the last 12 months
+        $months = collect([]);
+        for ($i = 11; $i >= 0; $i--) {
+            $months->push(Carbon::now()->subMonths($i));
+        }
+
+        // Query to get unique buyers count per month for this seller's products
+        $buyerCounts = Order::select(
+            DB::raw("strftime('%Y-%m', created_at) as month"),
+            DB::raw('COUNT(DISTINCT user_id) as buyer_count')
+        )
+            ->whereHas('items.product', function ($query) use ($seller) {
+                $query->where('seller_id', $seller->id);
+            })
+            ->where('created_at', '>=', now()->subMonths(11)->startOfMonth())
+            ->groupBy('month')
+            ->orderBy('month')
+            ->pluck('buyer_count', 'month')
+            ->toArray();
+
+        // Prepare data for all months (including months with zero buyers)
+        $monthlyData = $months->mapWithKeys(function ($month) use ($buyerCounts) {
+            $key = $month->format('Y-m');
+            return [$key => $buyerCounts[$key] ?? 0];
+        });
+
         return [
             'datasets' => [
                 [
                     'label' => 'Customers',
-                    'data' => [4344, 5676, 6798, 7890, 8987, 9388, 10343, 10524, 13664, 14345, 15753, 17332],
+                    'data' => array_values($monthlyData->toArray()),
                     'fill' => 'start',
                 ],
             ],
-            'labels' => ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            'labels' => $months->map(fn($month) => $month->format('M'))->toArray(),
         ];
     }
 }

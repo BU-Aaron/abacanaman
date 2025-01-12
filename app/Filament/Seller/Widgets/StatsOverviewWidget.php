@@ -2,70 +2,199 @@
 
 namespace App\Filament\Seller\Widgets;
 
+use App\Models\Shop\Order;
 use Carbon\Carbon;
-use Filament\Widgets\Concerns\InteractsWithPageFilters;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
-use Illuminate\Support\Number;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class StatsOverviewWidget extends BaseWidget
 {
-    use InteractsWithPageFilters;
-
     protected static ?int $sort = 0;
 
     protected function getStats(): array
     {
+        // Get the current authenticated seller
+        $seller = Auth::user()->seller;
 
-        $startDate = ! is_null($this->filters['startDate'] ?? null) ?
+        // Retrieve filter dates
+        $startDate = !is_null($this->filters['startDate'] ?? null) ?
             Carbon::parse($this->filters['startDate']) :
             null;
 
-        $endDate = ! is_null($this->filters['endDate'] ?? null) ?
+        $endDate = !is_null($this->filters['endDate'] ?? null) ?
             Carbon::parse($this->filters['endDate']) :
             now();
 
-        $isBusinessCustomersOnly = $this->filters['businessCustomersOnly'] ?? null;
-        $businessCustomerMultiplier = match (true) {
-            boolval($isBusinessCustomersOnly) => 2 / 3,
-            blank($isBusinessCustomersOnly) => 1,
-            default => 1 / 3,
-        };
+        // Query orders related to the current seller
+        $ordersQuery = Order::whereHas('items.product', function ($query) use ($seller) {
+            $query->where('shop_products.seller_id', $seller->id);
+        });
 
-        $diffInDays = $startDate ? $startDate->diffInDays($endDate) : 0;
+        // Apply date filters if available
+        if ($startDate) {
+            $ordersQuery->whereDate('created_at', '>=', $startDate);
+        }
 
-        $revenue = (int) (($startDate ? ($diffInDays * 137) : 192100) * $businessCustomerMultiplier);
-        $newCustomers = (int) (($startDate ? ($diffInDays * 7) : 1340) * $businessCustomerMultiplier);
-        $newOrders = (int) (($startDate ? ($diffInDays * 13) : 3543) * $businessCustomerMultiplier);
+        if ($endDate) {
+            $ordersQuery->whereDate('created_at', '<=', $endDate);
+        }
 
+        // Calculate Revenue
+        $revenue = $ordersQuery->sum('total_price');
+
+        // Calculate New Customers (distinct user_id)
+        $newCustomers = $ordersQuery->distinct('user_id')->count('user_id');
+
+        // Calculate New Orders
+        $newOrders = $ordersQuery->count();
+
+        // Format numbers
         $formatNumber = function (int $number): string {
             if ($number < 1000) {
-                return (string) Number::format($number, 0);
+                return (string) number_format($number, 0);
             }
 
             if ($number < 1000000) {
-                return Number::format($number / 1000, 2) . 'k';
+                return number_format($number / 1000, 2) . 'k';
             }
 
-            return Number::format($number / 1000000, 2) . 'm';
+            return number_format($number / 1000000, 2) . 'm';
         };
 
         return [
-            Stat::make('Revenue', 'PHP' . $formatNumber($revenue))
-                ->description('32k increase')
-                ->descriptionIcon('heroicon-m-arrow-trending-up')
-                ->chart([7, 2, 10, 3, 15, 4, 17])
+            Stat::make('Revenue', 'PHP ' . $formatNumber($revenue))
+                ->description($startDate ? "{$formatNumber($revenue)} increase" : 'PHP ' . $formatNumber($revenue))
+                ->descriptionIcon(
+                    collect(
+                        $ordersQuery->select(DB::raw('DATE(created_at) as date'), DB::raw('SUM(total_price) as daily_revenue'))
+                            ->groupBy('date')
+                            ->orderBy('date', 'desc')
+                            ->limit(7)
+                            ->pluck('daily_revenue')
+                            ->reverse()
+                            ->toArray()
+                    )->first() > collect(
+                        $ordersQuery->select(DB::raw('DATE(created_at) as date'), DB::raw('SUM(total_price) as daily_revenue'))
+                            ->groupBy('date')
+                            ->orderBy('date', 'desc')
+                            ->limit(7)
+                            ->pluck('daily_revenue')
+                            ->reverse()
+                            ->toArray()
+                    )->last()
+                        ? 'heroicon-m-arrow-trending-up'
+                        : 'heroicon-m-arrow-trending-down'
+                )
+                ->chart($ordersQuery->select(DB::raw('DATE(created_at) as date'), DB::raw('SUM(total_price) as daily_revenue'))
+                    ->groupBy('date')
+                    ->orderBy('date', 'desc')
+                    ->limit(7)
+                    ->pluck('daily_revenue')
+                    ->reverse()
+                    ->toArray())
                 ->color('success'),
-            Stat::make('New customers', $formatNumber($newCustomers))
-                ->description('3% decrease')
-                ->descriptionIcon('heroicon-m-arrow-trending-down')
-                ->chart([17, 16, 14, 15, 14, 13, 12])
-                ->color('danger'),
-            Stat::make('New orders', $formatNumber($newOrders))
-                ->description('7% increase')
-                ->descriptionIcon('heroicon-m-arrow-trending-up')
-                ->chart([15, 4, 10, 2, 12, 4, 12])
-                ->color('success'),
+
+            Stat::make('New Customers', $formatNumber($newCustomers))
+                ->description($startDate ? "{$formatNumber($newCustomers)} increase" : $formatNumber($newCustomers))
+                ->descriptionIcon(
+                    collect(
+                        $ordersQuery->select(DB::raw('DATE(created_at) as date'), DB::raw('COUNT(DISTINCT user_id) as daily_customers'))
+                            ->groupBy('date')
+                            ->orderBy('date', 'desc')
+                            ->limit(7)
+                            ->pluck('daily_customers')
+                            ->reverse()
+                            ->toArray()
+                    )->first() > collect(
+                        $ordersQuery->select(DB::raw('DATE(created_at) as date'), DB::raw('COUNT(DISTINCT user_id) as daily_customers'))
+                            ->groupBy('date')
+                            ->orderBy('date', 'desc')
+                            ->limit(7)
+                            ->pluck('daily_customers')
+                            ->reverse()
+                            ->toArray()
+                    )->last()
+                        ? 'heroicon-m-arrow-trending-up'
+                        : 'heroicon-m-arrow-trending-down'
+                )
+                ->chart($ordersQuery->select(DB::raw('DATE(created_at) as date'), DB::raw('COUNT(DISTINCT user_id) as daily_customers'))
+                    ->groupBy('date')
+                    ->orderBy('date', 'desc')
+                    ->limit(7)
+                    ->pluck('daily_customers')
+                    ->reverse()
+                    ->toArray())
+                ->color(collect(
+                    $ordersQuery->select(DB::raw('DATE(created_at) as date'), DB::raw('COUNT(DISTINCT user_id) as daily_customers'))
+                        ->groupBy('date')
+                        ->orderBy('date', 'desc')
+                        ->limit(7)
+                        ->pluck('daily_customers')
+                        ->reverse()
+                        ->toArray()
+                )->first() > collect(
+                    $ordersQuery->select(DB::raw('DATE(created_at) as date'), DB::raw('COUNT(DISTINCT user_id) as daily_customers'))
+                        ->groupBy('date')
+                        ->orderBy('date', 'desc')
+                        ->limit(7)
+                        ->pluck('daily_customers')
+                        ->reverse()
+                        ->toArray()
+                )->last()
+                    ? 'success'
+                    : 'danger'),
+
+            Stat::make('New Orders', $formatNumber($newOrders))
+                ->description($startDate ? "{$formatNumber($newOrders)} increase" : $formatNumber($newOrders))
+                ->descriptionIcon(
+                    collect(
+                        $ordersQuery->select(DB::raw('DATE(created_at) as date'), DB::raw('COUNT(DISTINCT user_id) as daily_customers'))
+                            ->groupBy('date')
+                            ->orderBy('date', 'desc')
+                            ->limit(7)
+                            ->pluck('daily_customers')
+                            ->reverse()
+                            ->toArray()
+                    )->first() > collect(
+                        $ordersQuery->select(DB::raw('DATE(created_at) as date'), DB::raw('COUNT(DISTINCT user_id) as daily_customers'))
+                            ->groupBy('date')
+                            ->orderBy('date', 'desc')
+                            ->limit(7)
+                            ->pluck('daily_customers')
+                            ->reverse()
+                            ->toArray()
+                    )->last()
+                        ? 'heroicon-m-arrow-trending-up'
+                        : 'heroicon-m-arrow-trending-down'
+                )
+                ->chart($ordersQuery->select(DB::raw('DATE(created_at) as date'), DB::raw('COUNT(DISTINCT user_id) as daily_customers'))
+                    ->groupBy('date')
+                    ->orderBy('date', 'desc')
+                    ->limit(7)
+                    ->pluck('daily_customers')
+                    ->reverse()
+                    ->toArray())
+                ->color(collect(
+                    $ordersQuery->select(DB::raw('DATE(created_at) as date'), DB::raw('COUNT(DISTINCT user_id) as daily_customers'))
+                        ->groupBy('date')
+                        ->orderBy('date', 'desc')
+                        ->limit(7)
+                        ->pluck('daily_customers')
+                        ->reverse()
+                        ->toArray()
+                )->first() > collect(
+                    $ordersQuery->select(DB::raw('DATE(created_at) as date'), DB::raw('COUNT(DISTINCT user_id) as daily_customers'))
+                        ->groupBy('date')
+                        ->orderBy('date', 'desc')
+                        ->limit(7)
+                        ->pluck('daily_customers')
+                        ->reverse()
+                        ->toArray()
+                )->last()
+                    ? 'success'
+                    : 'danger'),
         ];
     }
 }

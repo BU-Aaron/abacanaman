@@ -106,7 +106,7 @@ class OrderResource extends Resource
                     ->sortable()
                     ->summarize([
                         Tables\Columns\Summarizers\Sum::make()
-                            ->money(),
+                            ->money('PHP'),
                     ]),
                 Tables\Columns\TextColumn::make('shipping_price')
                     ->label('Shipping cost')
@@ -115,7 +115,7 @@ class OrderResource extends Resource
                     ->toggleable()
                     ->summarize([
                         Tables\Columns\Summarizers\Sum::make()
-                            ->money(),
+                            ->money('PHP'),
                     ]),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Order Date')
