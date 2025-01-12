@@ -39,7 +39,7 @@ class OrderStats extends BaseWidget
                         ->toArray()
                 ),
             Stat::make('New orders', $this->getPageTableQuery()->whereIn('status', ['new', 'processing'])->count()),
-            Stat::make('Revenue this month', number_format($this->getPageTableQuery()->where('created_at', '>=', now()->startOfMonth())->sum('total_price'), 2)),
+            Stat::make('Revenue this month', 'PHP ' . number_format($this->getPageTableQuery()->where('created_at', '>=', now()->startOfMonth())->sum('total_price'), 2)),
         ];
     }
 }

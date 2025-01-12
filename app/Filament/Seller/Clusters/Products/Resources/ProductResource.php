@@ -169,11 +169,6 @@ class ProductResource extends Resource
                     ->searchable()
                     ->sortable(),
 
-                Tables\Columns\TextColumn::make('brand.name')
-                    ->searchable()
-                    ->sortable()
-                    ->toggleable(),
-
                 Tables\Columns\IconColumn::make('is_visible')
                     ->label('Visibility')
                     ->sortable()
@@ -181,26 +176,15 @@ class ProductResource extends Resource
 
                 Tables\Columns\TextColumn::make('price')
                     ->label('Price')
+                    ->money('PHP')
                     ->searchable()
                     ->sortable(),
-
-                Tables\Columns\TextColumn::make('sku')
-                    ->label('SKU')
-                    ->searchable()
-                    ->sortable()
-                    ->toggleable(),
 
                 Tables\Columns\TextColumn::make('qty')
                     ->label('Quantity')
                     ->searchable()
                     ->sortable()
                     ->toggleable(),
-
-                Tables\Columns\TextColumn::make('security_stock')
-                    ->searchable()
-                    ->sortable()
-                    ->toggleable()
-                    ->toggledHiddenByDefault(),
 
                 Tables\Columns\TextColumn::make('published_at')
                     ->label('Publish Date')
