@@ -18,6 +18,7 @@ class Seller extends Model
         'store_description',
         'store_logo',
         'contact_number',
+        'is_verified',
     ];
 
     /**

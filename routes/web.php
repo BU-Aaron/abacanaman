@@ -1,5 +1,6 @@
 <?php
 
+use App\Filament\Seller\Pages\Auth\SellerApprovedVerification;
 use App\Livewire\DiscountCalendar;
 use App\Livewire\BuyerChat;
 use App\Livewire\Auth\ForgotPasswordPage;
