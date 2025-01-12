@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Seller\Pages\Auth\EditProfile;
 use App\Filament\Seller\Pages\Auth\Registration;
 use App\Filament\Seller\Pages\Auth\SellerApprovedVerification;
 use App\Filament\Seller\Resources\Shop\ConversationResource\Pages\ViewConversation;
@@ -29,7 +30,7 @@ class SellerPanelProvider extends PanelProvider
             ->path('seller')
             ->brandLogo(fn() => view('filament.app.logo.seller'))
             ->login()
-            ->profile()
+            ->profile(EditProfile::class)
             ->registration(Registration::class)
             ->passwordReset()
             ->emailVerification(SellerApprovedVerification::class)
