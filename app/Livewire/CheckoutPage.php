@@ -97,7 +97,7 @@ class CheckoutPage extends Component
             'user_id' => Auth::id(),
             'currency' => 'php',
             'payment_method' => $this->payment_method,
-            'payment_status' => $this->payment_method === 'gcash' ? 'paid' : 'pending',
+            'payment_status' => $this->payment_method === 'gcash' ? 'pending' : 'paid',
             'total_price' => CartManagement::calculateGrandTotal($cart_items),
             'status' => 'new',
             'shipping_method' => 'pickup',
