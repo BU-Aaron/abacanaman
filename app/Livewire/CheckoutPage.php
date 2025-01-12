@@ -39,6 +39,12 @@ class CheckoutPage extends Component
             $nameParts = explode(' ', $user->name, 2);
             $this->first_name = $nameParts[0] ?? '';
             $this->last_name = $nameParts[1] ?? '';
+
+            $this->phone = $user->phone_number;
+            $this->street_address = $user->address;
+            $this->city = $user->city;
+            $this->state = $user->state;
+            $this->zip_code = $user->zip_code;
         }
 
         $cart_items = CartManagement::getCartItemsFromCookie();

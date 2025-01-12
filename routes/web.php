@@ -20,6 +20,7 @@ use App\Livewire\ProductDetailPage;
 use App\Livewire\ProductsPage;
 use App\Livewire\SellerPage;
 use App\Livewire\SuccessPage;
+use App\Livewire\BuyerProfilePage;
 use Filament\Facades\Filament;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -55,6 +56,8 @@ Route::middleware('auth.buyer')->group(function () {
         Auth::logout();
         return redirect('/');
     });
+
+    Route::get('/profile', BuyerProfilePage::class)->name('buyer.profile');
 
     Route::get('/checkout', CheckoutPage::class)->name('checkout');
 

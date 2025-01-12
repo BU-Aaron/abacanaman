@@ -18,6 +18,11 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('phone_number')->nullable();
+            $table->string('address')->nullable();
+            $table->string('city')->nullable();
+            $table->string('state')->nullable();
+            $table->string('zip_code')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('role')->default(User::ROLE_BUYER);

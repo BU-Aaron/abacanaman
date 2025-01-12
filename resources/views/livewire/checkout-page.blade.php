@@ -2,6 +2,7 @@
 	<h1 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">
 		Checkout
 	</h1>
+    <p class="text-gray-500 dark:text-gray-400 mb-6">Please confirm the form below to complete your order. This form is automatically filled up with your profile information.</p>
     <form wire:submit.prevent="placeOrder">
 	<div class="grid grid-cols-12 gap-4">
 		<div class="md:col-span-12 lg:col-span-8 col-span-12">
