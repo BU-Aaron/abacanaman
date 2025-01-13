@@ -32,6 +32,6 @@ class EmailVerificationPage extends Component
 
     public function render()
     {
-        return view('livewire.auth.email-verification-page')->layout('components.layouts.guest');
+        return view('livewire.auth.email-verification-page');
     }
 }
