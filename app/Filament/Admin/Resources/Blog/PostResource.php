@@ -40,6 +40,17 @@ class PostResource extends Resource
     {
         return $form
             ->schema([
+                Forms\Components\Section::make('Status')
+                    ->schema([
+                        Forms\Components\Toggle::make('is_approved')
+                            ->label('Approved')
+                            ->helperText('Approve this post to make it visible to the public')
+                            ->default(false)
+                            ->inline(),
+                    ])
+                    ->collapsible(false)
+                    ->columns(1),
+
                 Forms\Components\Section::make()
                     ->schema([
                         Forms\Components\TextInput::make('title')
@@ -66,11 +77,6 @@ class PostResource extends Resource
 
                         Forms\Components\DatePicker::make('published_at')
                             ->label('Published Date'),
-
-                        Forms\Components\Toggle::make('is_approved')
-                            ->label('Approved')
-                            ->helperText('Approve this post to make it visible to the public')
-                            ->default(false),
                     ])
                     ->columns(2),
 

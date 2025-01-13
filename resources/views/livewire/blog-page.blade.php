@@ -1,16 +1,6 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <h1 class="text-4xl font-bold mb-8 text-center">Blog</h1>
 
-    <!-- Search Bar -->
-    <div class="mb-6 flex justify-center">
-        <input
-            type="text"
-            wire:model.debounce.500ms="search"
-            placeholder="Search blog posts..."
-            class="w-full max-w-md px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-600"
-        />
-    </div>
-
     <!-- Blog Posts -->
     <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
         @forelse($posts as $post)
