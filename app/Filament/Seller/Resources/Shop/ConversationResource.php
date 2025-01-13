@@ -51,7 +51,6 @@ class ConversationResource extends Resource
                     ->label('Latest Message')
                     ->limit(50)
                     ->sortable()
-                    ->toggleable()
                     ->wrap()
                     ->getStateUsing(function (Conversation $record) {
                         $message = $record->latestMessage;

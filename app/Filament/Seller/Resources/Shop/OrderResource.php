@@ -85,8 +85,7 @@ class OrderResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('customer.name')
                     ->searchable()
-                    ->sortable()
-                    ->toggleable(),
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('status')
                     ->badge(),
                 Tables\Columns\TextColumn::make('payment_status')
@@ -103,48 +102,13 @@ class OrderResource extends Resource
                     ->label('Shipping cost')
                     ->searchable()
                     ->sortable()
-                    ->toggleable()
                     ->summarize([
                         Tables\Columns\Summarizers\Sum::make()
                             ->money('PHP'),
                     ]),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Order Date')
-                    ->date()
-                    ->toggleable(),
-            ])
-            ->filters([
-                Tables\Filters\TrashedFilter::make(),
-
-                Tables\Filters\Filter::make('created_at')
-                    ->form([
-                        Forms\Components\DatePicker::make('created_from')
-                            ->placeholder(fn($state): string => 'Dec 18, ' . now()->subYear()->format('Y')),
-                        Forms\Components\DatePicker::make('created_until')
-                            ->placeholder(fn($state): string => now()->format('M d, Y')),
-                    ])
-                    ->query(function (Builder $query, array $data): Builder {
-                        return $query
-                            ->when(
-                                $data['created_from'] ?? null,
-                                fn(Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
-                            )
-                            ->when(
-                                $data['created_until'] ?? null,
-                                fn(Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
-                            );
-                    })
-                    ->indicateUsing(function (array $data): array {
-                        $indicators = [];
-                        if ($data['created_from'] ?? null) {
-                            $indicators['created_from'] = 'Order from ' . Carbon::parse($data['created_from'])->toFormattedDateString();
-                        }
-                        if ($data['created_until'] ?? null) {
-                            $indicators['created_until'] = 'Order until ' . Carbon::parse($data['created_until'])->toFormattedDateString();
-                        }
-
-                        return $indicators;
-                    }),
+                    ->date(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

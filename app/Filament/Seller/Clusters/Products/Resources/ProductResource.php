@@ -184,38 +184,6 @@ class ProductResource extends Resource
                     ->searchable()
                     ->sortable(),
             ])
-            ->filters([
-                QueryBuilder::make()
-                    ->constraints([
-                        TextConstraint::make('name'),
-                        TextConstraint::make('slug'),
-                        TextConstraint::make('sku')
-                            ->label('SKU (Stock Keeping Unit)'),
-                        TextConstraint::make('barcode')
-                            ->label('Barcode (ISBN, UPC, GTIN, etc.)'),
-                        TextConstraint::make('description'),
-                        NumberConstraint::make('old_price')
-                            ->label('Compare at price')
-                            ->icon('heroicon-m-currency-dollar'),
-                        NumberConstraint::make('price')
-                            ->icon('heroicon-m-currency-dollar'),
-                        NumberConstraint::make('cost')
-                            ->label('Cost per item')
-                            ->icon('heroicon-m-currency-dollar'),
-                        NumberConstraint::make('qty')
-                            ->label('Quantity'),
-                        NumberConstraint::make('security_stock'),
-                        BooleanConstraint::make('is_visible')
-                            ->label('Visibility'),
-                        BooleanConstraint::make('featured'),
-                        BooleanConstraint::make('backorder'),
-                        BooleanConstraint::make('requires_shipping')
-                            ->icon('heroicon-m-truck'),
-                        DateConstraint::make('published_at'),
-                    ])
-                    ->constraintPickerColumns(2),
-            ], layout: Tables\Enums\FiltersLayout::AboveContentCollapsible)
-            ->deferFilters()
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])

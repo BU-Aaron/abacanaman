@@ -65,7 +65,6 @@ class DiscountResource extends Resource
                 Tables\Columns\IconColumn::make('is_verified')
                     ->label('Verified')
                     ->sortable()
-                    ->toggleable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('discount_percentage')->label('Discount (%)')->sortable(),
                 Tables\Columns\TextColumn::make('start_date')->label('Start Date')->sortable(),
