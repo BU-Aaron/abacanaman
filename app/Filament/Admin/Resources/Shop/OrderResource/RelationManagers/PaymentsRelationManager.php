@@ -65,7 +65,7 @@ class PaymentsRelationManager extends RelationManager
 
                         Tables\Columns\TextColumn::make('amount')
                             ->sortable()
-                            ->money(fn($record) => $record->currency),
+                            ->money('PHP'),
                     ]),
 
                 Tables\Columns\ColumnGroup::make('Context')

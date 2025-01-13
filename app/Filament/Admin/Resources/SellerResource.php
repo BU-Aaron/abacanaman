@@ -41,45 +41,57 @@ class SellerResource extends Resource
             ->schema([
                 TextInput::make('store_name')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->readOnly(),
 
                 Textarea::make('store_description')
                     ->rows(3)
-                    ->maxLength(1000),
+                    ->maxLength(1000)
+                    ->readOnly(),
 
                 TextInput::make('contact_number')
                     ->label('Contact Number')
-                    ->tel(),
+                    ->tel()
+                    ->readOnly(),
 
                 TextInput::make('address')
                     ->label('Address')
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->readOnly(),
 
                 TextInput::make('city')
                     ->label('City')
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->readOnly(),
 
                 TextInput::make('state')
                     ->label('State')
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->readOnly(),
 
                 FileUpload::make('store_logo')
                     ->label('Store Logo')
                     ->image()
                     ->directory('store-logos')
                     ->imageResizeTargetWidth(300)
-                    ->imageResizeTargetHeight(300),
+                    ->imageResizeTargetHeight(300)
+                    ->deletable(false),
 
                 FileUpload::make('document_proof')
                     ->label('Business Document')
                     ->image()
                     ->directory('seller-documents')
-                    ->maxSize(5120),
+                    ->maxSize(5120)
+                    ->imagePreviewHeight('400')
+                    ->openable()
+                    ->downloadable()
+                    ->deletable(false)
+                    ->imageResizeMode('cover'),
 
                 Toggle::make('is_verified')
                     ->label('Verified')
                     ->helperText('Mark the seller as verified after reviewing.')
-                    ->required(),
+                    ->required()
             ]);
     }
 

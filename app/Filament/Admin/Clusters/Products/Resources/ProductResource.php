@@ -2,8 +2,6 @@
 
 namespace App\Filament\Admin\Clusters\Products\Resources;
 
-use App\Filament\Admin\Clusters\Products;
-use App\Filament\Admin\Clusters\Products\Resources\BrandResource\RelationManagers\ProductsRelationManager;
 use App\Filament\Admin\Clusters\Products\Resources\ProductResource\Widgets\ProductStats;
 use App\Models\Shop\Product;
 use Filament\Forms;
@@ -12,11 +10,6 @@ use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Filters\QueryBuilder;
-use Filament\Tables\Filters\QueryBuilder\Constraints\BooleanConstraint;
-use Filament\Tables\Filters\QueryBuilder\Constraints\DateConstraint;
-use Filament\Tables\Filters\QueryBuilder\Constraints\NumberConstraint;
-use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -182,76 +175,22 @@ class ProductResource extends Resource
                 Tables\Columns\TextColumn::make('user.name')
                     ->label('Seller')
                     ->searchable()
-                    ->sortable()
-                    ->toggleable(),
+                    ->sortable(),
 
                 Tables\Columns\IconColumn::make('is_visible')
                     ->label('Visibility')
-                    ->sortable()
-                    ->toggleable(),
+                    ->sortable(),
 
                 Tables\Columns\TextColumn::make('price')
                     ->label('Price')
                     ->searchable()
                     ->sortable(),
 
-                Tables\Columns\TextColumn::make('sku')
-                    ->label('SKU')
-                    ->searchable()
-                    ->sortable()
-                    ->toggleable(),
-
                 Tables\Columns\TextColumn::make('qty')
                     ->label('Quantity')
                     ->searchable()
                     ->sortable()
-                    ->toggleable(),
-
-                Tables\Columns\TextColumn::make('security_stock')
-                    ->searchable()
-                    ->sortable()
-                    ->toggleable()
-                    ->toggledHiddenByDefault(),
-
-                Tables\Columns\TextColumn::make('published_at')
-                    ->label('Publish Date')
-                    ->date()
-                    ->sortable()
-                    ->toggleable()
-                    ->toggledHiddenByDefault(),
             ])
-            ->filters([
-                QueryBuilder::make()
-                    ->constraints([
-                        TextConstraint::make('name'),
-                        TextConstraint::make('slug'),
-                        TextConstraint::make('sku')
-                            ->label('SKU (Stock Keeping Unit)'),
-                        TextConstraint::make('barcode')
-                            ->label('Barcode (ISBN, UPC, GTIN, etc.)'),
-                        TextConstraint::make('description'),
-                        NumberConstraint::make('old_price')
-                            ->label('Compare at price')
-                            ->icon('heroicon-m-currency-dollar'),
-                        NumberConstraint::make('price')
-                            ->icon('heroicon-m-currency-dollar'),
-                        NumberConstraint::make('cost')
-                            ->label('Cost per item')
-                            ->icon('heroicon-m-currency-dollar'),
-                        NumberConstraint::make('qty')
-                            ->label('Quantity'),
-                        NumberConstraint::make('security_stock'),
-                        BooleanConstraint::make('is_visible')
-                            ->label('Visibility'),
-                        BooleanConstraint::make('featured'),
-                        BooleanConstraint::make('backorder'),
-                        BooleanConstraint::make('requires_shipping')
-                            ->icon('heroicon-m-truck'),
-                        DateConstraint::make('published_at'),
-                    ])
-                    ->constraintPickerColumns(2),
-            ], layout: Tables\Enums\FiltersLayout::AboveContentCollapsible)
-            ->deferFilters()
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
