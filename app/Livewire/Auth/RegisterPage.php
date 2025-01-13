@@ -27,11 +27,15 @@ class RegisterPage extends Component
             'name' => $this->name,
             'email' => $this->email,
             'password' => Hash::make($this->password),
+            'role' => User::ROLE_BUYER,
         ]);
 
         Auth::login($user);
 
-        return redirect()->intended('/');
+        // Send verification email
+        $user->sendEmailVerificationNotification();
+
+        return redirect()->route('verification.notice');
     }
 
     public function render()

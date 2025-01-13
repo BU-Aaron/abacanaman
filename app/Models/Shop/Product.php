@@ -81,9 +81,12 @@ class Product extends Model implements HasMedia
     public function activeDiscount()
     {
         return $this->hasOne(Discount::class, 'shop_product_id')
-            ->whereDate('start_date', '<=', now())
-            ->whereDate('end_date', '>=', now());
+            ->where('is_verified', true)
+            ->where('start_date', '<=', now())
+            ->where('end_date', '>=', now())
+            ->latest();
     }
+
 
     /**
      * Get the current price after applying any active discount

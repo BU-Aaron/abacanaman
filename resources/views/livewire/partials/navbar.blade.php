@@ -24,7 +24,7 @@
           <div class="overflow-hidden overflow-y-auto max-h-[75vh] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-slate-700 dark:[&::-webkit-scrollbar-thumb]:bg-slate-500">
             <div class="flex flex-col gap-x-0 mt-5 divide-y divide-dashed divide-gray-200 md:flex-row md:items-center md:justify-end md:gap-x-7 md:mt-0 md:ps-7 md:divide-y-0 md:divide-solid dark:divide-gray-700">
 
-              <a  class="font-medium {{ request()->routeIs('index') ? 'text-amber-600' : 'text-gray-500' }} py-3 md:py-6 dark:text-amber-500 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="{{ route('index') }}" aria-current="page">Home</a>
+              <a  class="font-medium {{ request()->routeIs('home') ? 'text-amber-600' : 'text-gray-500' }} py-3 md:py-6 dark:text-amber-500 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="{{ route('home') }}" aria-current="page">Home</a>
 
               <a class="font-medium {{ request()->routeIs('product-categories') ? 'text-amber-600' : 'text-gray-500' }} hover:text-gray-400 py-3 md:py-6 dark:text-gray-400 dark:hover:text-gray-500 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="{{ route('product-categories') }}">
                 Categories

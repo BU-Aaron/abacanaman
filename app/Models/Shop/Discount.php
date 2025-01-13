@@ -13,6 +13,11 @@ class Discount extends Model
         'discount_percentage',
         'start_date',
         'end_date',
+        'is_verified',
+    ];
+
+    protected $casts = [
+        'is_verified' => 'boolean',
     ];
 
     /**

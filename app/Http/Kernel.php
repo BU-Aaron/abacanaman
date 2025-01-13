@@ -66,5 +66,6 @@ class Kernel extends HttpKernel
         'auth.seller' => \App\Http\Middleware\AuthenticateSeller::class,
         'auth.admin' => \App\Http\Middleware\AuthenticateAdmin::class,
         'auth.buyer' => \App\Http\Middleware\AuthenticateBuyer::class,
+        'buyer.verified' => \App\Http\Middleware\EnsureBuyerEmailIsVerified::class,
     ];
 }

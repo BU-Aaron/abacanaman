@@ -53,6 +53,10 @@ class DiscountResource extends Resource
                     ->required()
                     ->afterOrEqual('start_date')
                     ->default(today()->addDays(7)),
+                Forms\Components\Toggle::make('is_verified')
+                    ->label('Verify Discount')
+                    ->helperText('Only verified discounts will be visible to customers')
+                    ->default(false),
             ]);
     }
 
@@ -64,6 +68,10 @@ class DiscountResource extends Resource
                 Tables\Columns\TextColumn::make('discount_percentage')->label('Discount (%)')->sortable(),
                 Tables\Columns\TextColumn::make('start_date')->label('Start Date')->sortable(),
                 Tables\Columns\TextColumn::make('end_date')->label('End Date')->sortable(),
+                Tables\Columns\ToggleColumn::make('is_verified')
+                    ->label('Verified')
+                    ->sortable()
+                    ->searchable(),
             ])
             ->filters([
                 //
