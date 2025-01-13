@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->longText('content');
             $table->date('published_at')->nullable();
+            $table->boolean('is_approved')->default(false);
             $table->string('seo_title', 60)->nullable();
             $table->string('seo_description', 160)->nullable();
             $table->string('image')->nullable();
