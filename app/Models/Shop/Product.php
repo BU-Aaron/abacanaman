@@ -72,7 +72,7 @@ class Product extends Model implements HasMedia
      */
     public function discounts()
     {
-        return $this->hasMany(Discount::class);
+        return $this->hasMany(Discount::class, 'shop_product_id');
     }
 
     /**
@@ -80,6 +80,45 @@ class Product extends Model implements HasMedia
      */
     public function activeDiscount()
     {
-        return $this->hasOne(Discount::class)->whereDate('start_date', '<=', now())->whereDate('end_date', '>=', now());
+        return $this->hasOne(Discount::class, 'shop_product_id')
+            ->whereDate('start_date', '<=', now())
+            ->whereDate('end_date', '>=', now());
+    }
+
+    /**
+     * Get the current price after applying any active discount
+     *
+     * @return float
+     */
+    public function getDiscountedPriceAttribute()
+    {
+        $activeDiscount = $this->activeDiscount;
+
+        if ($activeDiscount) {
+            $discountAmount = ($this->price * $activeDiscount->discount_percentage) / 100;
+            return $this->price - $discountAmount;
+        }
+
+        return $this->price;
+    }
+
+    /**
+     * Check if the product has an active discount
+     *
+     * @return bool
+     */
+    public function getHasActiveDiscountAttribute()
+    {
+        return $this->activeDiscount()->exists();
+    }
+
+    /**
+     * Get the active discount percentage
+     *
+     * @return float|null
+     */
+    public function getActiveDiscountPercentageAttribute()
+    {
+        return $this->activeDiscount?->discount_percentage;
     }
 }

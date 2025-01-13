@@ -20,7 +20,10 @@ class SellerPage extends Component
     {
         $this->seller_id = $seller_id;
         $this->seller = Seller::with('user')->findOrFail($seller_id);
-        $this->products = $this->seller->products()->where('is_visible', true)->get();
+        $this->products = $this->seller->products()
+            ->where('is_visible', true)
+            ->with('activeDiscount')
+            ->get();
     }
 
     public function addToCart($product_id)

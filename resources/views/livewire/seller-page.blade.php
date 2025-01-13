@@ -37,7 +37,21 @@
                     <div class="p-4">
                         <h4 class="text-lg font-semibold dark:text-gray-400">{{ $product->name }}</h4>
                         <p class="text-xl">
-                            <span class="text-green-600 dark:text-green-600">PHP {{ number_format($product->price, 2) }}</span>
+                            @if($product->has_active_discount)
+                                <span class="text-green-600 dark:text-green-600">
+                                    PHP {{ number_format($product->discounted_price, 2) }}
+                                </span>
+                                <span class="text-base font-normal text-gray-500 line-through dark:text-gray-400">
+                                    PHP {{ number_format($product->price, 2) }}
+                                </span>
+                                <span class="text-sm text-red-500 block">
+                                    -{{ $product->active_discount_percentage }}% off
+                                </span>
+                            @else
+                                <span class="text-green-600 dark:text-green-600">
+                                    PHP {{ number_format($product->price, 2) }}
+                                </span>
+                            @endif
                         </p>
                     </div>
                     <div class="flex justify-center p-4 border-t border-gray-300 dark:border-gray-700">

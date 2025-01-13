@@ -30,13 +30,14 @@ class CartManagement
             $product = Product::where('id', $product_id)->first(['id', 'name', 'price']);
 
             if ($product) {
+                $price = $product->discounted_price;
                 $cart_items[] = [
                     'product_id'    => $product->id,
                     'product_name'  => $product->name,
                     'image'         => $product->getFirstMediaUrl('product-images') ?: 'path/to/default/image.jpg',
                     'quantity'      => $quantity,
-                    'unit_amount'   => $product->price,
-                    'total_amount'  => $product->price * $quantity
+                    'unit_amount'   => $price,
+                    'total_amount'  => $price * $quantity
                 ];
             }
         }
