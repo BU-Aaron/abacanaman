@@ -2,11 +2,16 @@
 
 namespace App\Livewire;
 
+use App\Filament\Admin\Resources\Shop\OrderResource;
+use App\Filament\Seller\Resources\Shop\OrderResource as SellerOrderResource;
 use App\Helpers\CartManagement;
 use App\Mail\OrderPlaced;
 use App\Models\Shop\Order;
 use App\Models\Shop\OrderAddress;
 use App\Models\Shop\Payment;
+use App\Models\User;
+use Filament\Notifications\Actions\Action;
+use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Livewire\Attributes\Title;
@@ -141,6 +146,42 @@ class CheckoutPage extends Component
             $redirect_url = route('success');
         } else {
             $redirect_url = route('success');
+        }
+
+        // $admins = User::where('role', User::ROLE_ADMIN)->get();
+
+        // foreach ($admins as $admin) {
+        //     // Send notification to each admin
+        //     Notification::make()
+        //         ->title('New Order Received')
+        //         ->icon('heroicon-o-shopping-bag')
+        //         ->body("{$order->user->name} has placed a new order (#{$order->number}) containing {$order->items->count()} items.")
+        //         ->actions([
+        //             Action::make('View')
+        //                 ->url(OrderResource::getUrl('edit', ['record' => $order])),
+        //         ])
+        //         ->sendToDatabase($admin);
+        // }
+
+        // Collect unique sellers from the order items
+        $sellers = $order->items->map(function ($item) {
+            return $item->product->seller;
+        })->unique('id');
+
+        foreach ($sellers as $seller) {
+            $sellerUser = $seller->user;
+
+            if ($sellerUser) {
+                Notification::make()
+                    ->title('New Order for your Product')
+                    ->icon('heroicon-o-shopping-bag')
+                    ->body("A new order (#{$order->number}) has been placed for your product(s).")
+                    ->actions([
+                        Action::make('View Order')
+                            ->url("/seller/shop/orders/{$order->id}/edit"),
+                    ])
+                    ->sendToDatabase($sellerUser);
+            }
         }
 
         CartManagement::clearCartItems();
