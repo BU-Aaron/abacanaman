@@ -25,6 +25,7 @@ class Post extends Model
      */
     protected $casts = [
         'published_at' => 'date',
+        'is_approved' => 'boolean',
     ];
 
     /** @return BelongsTo<User,self> */

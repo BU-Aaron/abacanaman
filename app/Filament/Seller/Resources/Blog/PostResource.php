@@ -59,16 +59,8 @@ class PostResource extends Resource
                             ->required()
                             ->columnSpan('full'),
 
-                        Forms\Components\Select::make('blog_category_id')
-                            ->preload()
-                            ->relationship('category', 'name')
-                            ->searchable(),
-                        // ->required(),
-
                         Forms\Components\DatePicker::make('published_at')
                             ->label('Published Date'),
-
-                        SpatieTagsInput::make('tags'),
                     ])
                     ->columns(2),
 
@@ -110,20 +102,9 @@ class PostResource extends Resource
                         'success' => 'Published',
                     ]),
 
-                Tables\Columns\TextColumn::make('category.name')
-                    ->searchable()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-
                 Tables\Columns\TextColumn::make('published_at')
                     ->label('Published Date')
                     ->date(),
-
-                Tables\Columns\TextColumn::make('comments.customer.name')
-                    ->label('Comment users')
-                    ->listWithLineBreaks()
-                    ->limitList(2)
-                    ->expandableLimitedList(),
             ])
             ->filters([
                 Tables\Filters\Filter::make('published_at')
@@ -218,7 +199,6 @@ class PostResource extends Resource
         return $page->generateNavigationItems([
             Pages\ViewPost::class,
             Pages\EditPost::class,
-            Pages\ManagePostComments::class,
         ]);
     }
 
@@ -232,7 +212,6 @@ class PostResource extends Resource
         return [
             'index' => Pages\ListPosts::route('/'),
             'create' => Pages\CreatePost::route('/create'),
-            'comments' => Pages\ManagePostComments::route('/{record}/comments'),
             'edit' => Pages\EditPost::route('/{record}/edit'),
             'view' => Pages\ViewPost::route('/{record}'),
         ];

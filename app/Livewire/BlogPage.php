@@ -26,7 +26,8 @@ class BlogPage extends Component
     public function render()
     {
         $posts = Post::with(['user', 'category'])
-            ->where('published_at', '<=', now())
+            // ->where('published_at', '<=', now())
+            ->where('is_approved', true)
             ->where(function ($query) {
                 $query->where('title', 'like', '%' . $this->search . '%')
                     ->orWhere('content', 'like', '%' . $this->search . '%');
