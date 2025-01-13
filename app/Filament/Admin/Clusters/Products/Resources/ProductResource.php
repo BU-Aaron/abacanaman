@@ -179,11 +179,6 @@ class ProductResource extends Resource
                     ->searchable()
                     ->sortable(),
 
-                Tables\Columns\TextColumn::make('brand.name')
-                    ->searchable()
-                    ->sortable()
-                    ->toggleable(),
-
                 Tables\Columns\TextColumn::make('user.name')
                     ->label('Seller')
                     ->searchable()
@@ -296,7 +291,7 @@ class ProductResource extends Resource
 
     public static function getGloballySearchableAttributes(): array
     {
-        return ['name', 'sku', 'brand.name'];
+        return ['name', 'sku'];
     }
 
     public static function getGlobalSearchResultDetails(Model $record): array
@@ -304,14 +299,14 @@ class ProductResource extends Resource
         /** @var Product $record */
 
         return [
-            'Brand' => optional($record->brand)->name,
+            'Seller' => optional($record->user)->name,
         ];
     }
 
     /** @return Builder<Product> */
     public static function getGlobalSearchEloquentQuery(): Builder
     {
-        return parent::getGlobalSearchEloquentQuery()->with(['brand']);
+        return parent::getGlobalSearchEloquentQuery()->with(['user']);
     }
 
     public static function getNavigationBadge(): ?string
