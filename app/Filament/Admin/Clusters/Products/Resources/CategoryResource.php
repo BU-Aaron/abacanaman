@@ -19,7 +19,7 @@ class CategoryResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'name';
 
-    protected static ?string $navigationGroup = 'Shop';
+    protected static ?string $navigationGroup = 'Seller Shops';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 

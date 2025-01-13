@@ -32,7 +32,7 @@ class OrderResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'number';
 
-    protected static ?string $navigationGroup = 'Shop';
+    protected static ?string $navigationGroup = 'Seller Shops';
 
     protected static ?string $navigationIcon = 'heroicon-o-shopping-bag';
 

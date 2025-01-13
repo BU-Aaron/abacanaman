@@ -23,7 +23,7 @@ class DiscountResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-tag';
 
-    protected static ?string $navigationGroup = 'Shop';
+    protected static ?string $navigationGroup = 'Seller Shops';
 
     protected static ?int $navigationSort = 3;
 
