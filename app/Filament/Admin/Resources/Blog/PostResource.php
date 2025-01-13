@@ -54,6 +54,7 @@ class PostResource extends Resource
                 Forms\Components\Section::make()
                     ->schema([
                         Forms\Components\TextInput::make('title')
+                            ->readOnly()
                             ->required()
                             ->live(onBlur: true)
                             ->maxLength(255)
@@ -67,15 +68,18 @@ class PostResource extends Resource
                             ->unique(Post::class, 'slug', ignoreRecord: true),
 
                         Forms\Components\MarkdownEditor::make('content')
+                            ->disabled()
                             ->required()
                             ->columnSpan('full'),
 
                         Forms\Components\Select::make('user_id')
+                            ->disabled()
                             ->relationship('user', 'name')
                             ->searchable()
                             ->required(),
 
                         Forms\Components\DatePicker::make('published_at')
+                            ->disabled()
                             ->label('Published Date'),
                     ])
                     ->columns(2),
@@ -84,7 +88,8 @@ class PostResource extends Resource
                     ->schema([
                         Forms\Components\FileUpload::make('image')
                             ->image()
-                            ->hiddenLabel(),
+                            ->hiddenLabel()
+                            ->disabled(),
                     ])
                     ->collapsible(),
             ]);
@@ -101,15 +106,10 @@ class PostResource extends Resource
                     ->searchable()
                     ->sortable(),
 
-                Tables\Columns\TextColumn::make('slug')
-                    ->searchable()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-
                 Tables\Columns\TextColumn::make('user.name')
+                    ->label('Seller Author')
                     ->searchable()
-                    ->sortable()
-                    ->toggleable(),
+                    ->sortable(),
 
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
@@ -118,45 +118,9 @@ class PostResource extends Resource
                         'success' => 'Published',
                     ]),
 
-                Tables\Columns\TextColumn::make('category.name')
-                    ->searchable()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-
                 Tables\Columns\TextColumn::make('published_at')
                     ->label('Published Date')
                     ->date(),
-            ])
-            ->filters([
-                Tables\Filters\Filter::make('published_at')
-                    ->form([
-                        Forms\Components\DatePicker::make('published_from')
-                            ->placeholder(fn($state): string => 'Dec 18, ' . now()->subYear()->format('Y')),
-                        Forms\Components\DatePicker::make('published_until')
-                            ->placeholder(fn($state): string => now()->format('M d, Y')),
-                    ])
-                    ->query(function (Builder $query, array $data): Builder {
-                        return $query
-                            ->when(
-                                $data['published_from'] ?? null,
-                                fn(Builder $query, $date): Builder => $query->whereDate('published_at', '>=', $date),
-                            )
-                            ->when(
-                                $data['published_until'] ?? null,
-                                fn(Builder $query, $date): Builder => $query->whereDate('published_at', '<=', $date),
-                            );
-                    })
-                    ->indicateUsing(function (array $data): array {
-                        $indicators = [];
-                        if ($data['published_from'] ?? null) {
-                            $indicators['published_from'] = 'Published from ' . Carbon::parse($data['published_from'])->toFormattedDateString();
-                        }
-                        if ($data['published_until'] ?? null) {
-                            $indicators['published_until'] = 'Published until ' . Carbon::parse($data['published_until'])->toFormattedDateString();
-                        }
-
-                        return $indicators;
-                    }),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),

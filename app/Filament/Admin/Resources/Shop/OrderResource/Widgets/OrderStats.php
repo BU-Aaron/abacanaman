@@ -38,8 +38,8 @@ class OrderStats extends BaseWidget
                         ->map(fn(TrendValue $value) => $value->aggregate)
                         ->toArray()
                 ),
-            Stat::make('Open orders', $this->getPageTableQuery()->whereIn('status', ['open', 'processing'])->count()),
-            Stat::make('Average price', number_format($this->getPageTableQuery()->avg('total_price'), 2)),
+            Stat::make('New orders', $this->getPageTableQuery()->whereIn('status', ['new'])->count()),
+            Stat::make('Total price', number_format($this->getPageTableQuery()->sum('total_price'), 2)),
         ];
     }
 }

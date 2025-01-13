@@ -110,8 +110,7 @@ class SellerResource extends Resource
 
                 IconColumn::make('is_verified')
                     ->label('Verified')
-                    ->sortable()
-                    ->toggleable(),
+                    ->sortable(),
 
                 TextColumn::make('user.email')
                     ->label('Email')
@@ -124,13 +123,6 @@ class SellerResource extends Resource
                 TextColumn::make('created_at')
                     ->label('Registered At')
                     ->dateTime('M d, Y'),
-            ])
-            ->filters([
-                Tables\Filters\Filter::make('verified')
-                    ->query(fn($query) => $query->where('is_verified', true)),
-
-                Tables\Filters\Filter::make('pending_verification')
-                    ->query(fn($query) => $query->where('is_verified', false)),
             ])
             ->actions([
                 Tables\Actions\EditAction::make()->label('View'),
