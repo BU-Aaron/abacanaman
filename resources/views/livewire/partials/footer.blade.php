@@ -21,24 +21,43 @@
           <h4 class="font-semibold text-gray-100">Company</h4>
 
           <div class="mt-3 grid space-y-3">
-            <p><a class="inline-flex gap-x-2 text-gray-400 hover:text-gray-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">About us</a></p>
+            <p><a class="inline-flex gap-x-2 text-gray-400 hover:text-gray-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="/about">About Us</a></p>
             <p><a class="inline-flex gap-x-2 text-gray-400 hover:text-gray-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="/blog">Blog</a></p>
           </div>
+        </div>
+        <!-- End Col -->
+
+        <div class="col-span-1">
+          <h4 class="font-semibold text-gray-100">Contact Us</h4>
+
+          <div class="mt-3 grid space-y-3">
+            <p class="text-gray-400">
+              <strong>Email:</strong>
+              <a href="mailto:abaca.naman@gmail.com" class="text-amber-600 hover:underline">abaca.naman@gmail.com</a>
+            </p>
+            <p class="text-gray-400">
+              <strong>Contact Number:</strong>
+              <a href="tel:09511470693" class="text-amber-600 hover:underline">09511470693</a>
+            </p>
+          </div>
+        </div>
+        <!-- End Col -->
+
+        <div class="col-span-1">
+          <!-- You can add social media links or other information here -->
         </div>
       </div>
       <!-- End Grid -->
 
       <div class="mt-5 sm:mt-12 grid gap-y-2 sm:gap-y-0 sm:flex sm:justify-between sm:items-center">
         <div class="flex justify-between items-center">
-          <p class="hidden text-sm text-gray-400">© 2024 Abacanaman. All rights reserved.</p>
+          <p class="text-sm text-gray-400">© 2024 Abacanaman. All rights reserved.</p>
         </div>
         <!-- End Col -->
 
-        <!-- Social Brands -->
         <div>
-            <p class="text-sm text-gray-400">© 2024 Abacanaman. All rights reserved.</p>
+          <p class="text-sm text-gray-400">© 2024 Abacanaman. All rights reserved.</p>
         </div>
-        <!-- End Social Brands -->
       </div>
     </div>
   </footer>

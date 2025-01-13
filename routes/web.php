@@ -22,6 +22,7 @@ use App\Livewire\ProductsPage;
 use App\Livewire\SellerPage;
 use App\Livewire\SuccessPage;
 use App\Livewire\BuyerProfilePage;
+use App\Livewire\AboutPage;
 use Filament\Facades\Filament;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -93,3 +94,5 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
     $request->fulfill();
     return redirect('/')->with('verified', true);
 })->middleware(['auth', 'signed'])->name('verification.verify');
+
+Route::get('/about', AboutPage::class)->name('about');
