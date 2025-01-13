@@ -25,6 +25,8 @@ class CustomerResource extends Resource
 
     protected static ?string $navigationGroup = 'User Management';
 
+    protected static ?string $modelLabel = 'Customers';
+
     protected static ?int $navigationSort = 2;
 
     protected static ?string $navigationLabel = 'Customers';
@@ -41,18 +43,6 @@ class CustomerResource extends Resource
                     ->email()
                     ->required()
                     ->maxLength(255),
-
-                TextInput::make('password')
-                    ->password()
-                    ->required(fn($record) => is_null($record))
-                    ->maxLength(255),
-
-                Select::make('role')
-                    ->options([
-                        User::ROLE_BUYER => 'Buyer',
-                    ])
-                    ->required()
-                    ->disabled(),
             ]);
     }
 
@@ -67,9 +57,6 @@ class CustomerResource extends Resource
                 TextColumn::make('email')
                     ->searchable()
                     ->sortable(),
-
-                TextColumn::make('contact_number')
-                    ->label('Contact'),
 
                 TextColumn::make('created_at')
                     ->label('Registered At')

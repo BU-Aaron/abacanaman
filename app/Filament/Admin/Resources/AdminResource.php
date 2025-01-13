@@ -25,6 +25,8 @@ class AdminResource extends Resource
 
     protected static ?string $navigationGroup = 'User Management';
 
+    protected static ?string $modelLabel = 'Admin';
+
     protected static ?int $navigationSort = 3;
 
     protected static ?string $navigationLabel = 'Admins';
@@ -41,18 +43,6 @@ class AdminResource extends Resource
                     ->email()
                     ->required()
                     ->maxLength(255),
-
-                TextInput::make('password')
-                    ->password()
-                    ->required(fn($record) => is_null($record))
-                    ->maxLength(255),
-
-                Select::make('role')
-                    ->options([
-                        User::ROLE_ADMIN => 'Admin',
-                    ])
-                    ->required()
-                    ->disabled(),
             ]);
     }
 
@@ -77,10 +67,6 @@ class AdminResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
 
