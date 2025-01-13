@@ -171,8 +171,7 @@ class ProductResource extends Resource
 
                 Tables\Columns\IconColumn::make('is_visible')
                     ->label('Visibility')
-                    ->sortable()
-                    ->toggleable(),
+                    ->sortable(),
 
                 Tables\Columns\TextColumn::make('price')
                     ->label('Price')
@@ -183,15 +182,7 @@ class ProductResource extends Resource
                 Tables\Columns\TextColumn::make('qty')
                     ->label('Quantity')
                     ->searchable()
-                    ->sortable()
-                    ->toggleable(),
-
-                Tables\Columns\TextColumn::make('published_at')
-                    ->label('Publish Date')
-                    ->date()
-                    ->sortable()
-                    ->toggleable()
-                    ->toggledHiddenByDefault(),
+                    ->sortable(),
             ])
             ->filters([
                 QueryBuilder::make()

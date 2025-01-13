@@ -2,9 +2,14 @@
 
 namespace App\Filament\Seller\Clusters\Products\Resources\ProductResource\Pages;
 
+use App\Filament\Admin\Clusters\Products\Resources\ProductResource as AdminProductResource;
 use App\Filament\Seller\Clusters\Products\Resources\ProductResource;
+
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use Filament\Notifications\Notification;
+use Filament\Notifications\Actions\Action;
 
 class CreateProduct extends CreateRecord
 {
@@ -30,5 +35,23 @@ class CreateProduct extends CreateRecord
         $data['seller_id'] = $seller->id;
 
         return $data;
+    }
+
+    protected function afterCreate(): void
+    {
+        // Get all admin users
+        $admins = User::where('role', User::ROLE_ADMIN)->get();
+
+        foreach ($admins as $admin) {
+            Notification::make()
+                ->title('New Product Created')
+                ->icon('heroicon-o-plus-circle')
+                ->body("A new product '{$this->record->name}' has been created by seller '{$this->record->seller->store_name}'.")
+                ->actions([
+                    Action::make('View Product')
+                        ->url("/admin/products/{$this->record->id}/edit"),
+                ])
+                ->sendToDatabase($admin);
+        }
     }
 }
