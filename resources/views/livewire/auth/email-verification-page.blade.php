@@ -1,4 +1,3 @@
-<x-layouts.guest>
     <div class="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-md w-full space-y-8">
             <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md">
@@ -13,7 +12,7 @@
                 </div>
 
                 @if (session()->has('message'))
-                    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
+                    <div class="bg-green-100 border text-center border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
                         {{ session('message') }}
                     </div>
                 @endif
@@ -22,9 +21,11 @@
                 <div class="space-y-4">
                     <button
                         wire:click="resend"
-                        class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500"
+                        wire:loading.attr="disabled"
+                        class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 disabled:opacity-50"
                     >
-                        Resend Verification Email
+                        <span wire:loading.remove>Resend Verification Email</span>
+                        <span wire:loading>Sending...</span>
                     </button>
 
                     <button
@@ -37,4 +38,3 @@
             </div>
         </div>
     </div>
-</x-layouts.guest>
