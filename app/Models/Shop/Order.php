@@ -41,6 +41,15 @@ class Order extends Model
         'status' => OrderStatus::class,
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($order) {
+            $order->customer()->delete();
+        });
+    }
+
     /** @return MorphOne<OrderAddress> */
     public function address(): MorphOne
     {
