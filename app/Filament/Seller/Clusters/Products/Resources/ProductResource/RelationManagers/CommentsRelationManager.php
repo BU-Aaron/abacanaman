@@ -66,9 +66,11 @@ class CommentsRelationManager extends RelationManager
                     ->searchable()
                     ->sortable(),
 
-                Tables\Columns\IconColumn::make('is_visible')
-                    ->label('Visibility')
+                Tables\Columns\TextColumn::make('content')
+                    ->label('Content')
+                    ->searchable()
                     ->sortable(),
+
             ])
             ->filters([
                 //

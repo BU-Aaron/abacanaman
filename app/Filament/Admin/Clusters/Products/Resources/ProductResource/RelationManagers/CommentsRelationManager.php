@@ -71,10 +71,6 @@ class CommentsRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('rating')
                     ->label('Rating')
                     ->sortable(),
-
-                Tables\Columns\IconColumn::make('is_visible')
-                    ->label('Visibility')
-                    ->sortable(),
             ])
             ->filters([
                 //
