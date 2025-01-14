@@ -33,10 +33,6 @@ class CommentsRelationManager extends RelationManager
                     ->searchable()
                     ->required(),
 
-                Forms\Components\Toggle::make('is_visible')
-                    ->label('Approved for public')
-                    ->default(true),
-
                 Forms\Components\MarkdownEditor::make('content')
                     ->required()
                     ->label('Content'),
