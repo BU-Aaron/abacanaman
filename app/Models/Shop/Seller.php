@@ -44,4 +44,13 @@ class Seller extends Model
     {
         return $this->hasMany(Product::class);
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($seller) {
+            $seller->user()->delete();
+        });
+    }
 }
