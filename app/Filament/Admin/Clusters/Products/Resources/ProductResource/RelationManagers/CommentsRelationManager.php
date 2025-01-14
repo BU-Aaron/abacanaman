@@ -68,8 +68,9 @@ class CommentsRelationManager extends RelationManager
                     ->searchable()
                     ->sortable(),
 
-                Tables\Columns\TextColumn::make('rating')
-                    ->label('Rating')
+                Tables\Columns\TextColumn::make('content')
+                    ->label('Content')
+                    ->searchable()
                     ->sortable(),
             ])
             ->filters([
