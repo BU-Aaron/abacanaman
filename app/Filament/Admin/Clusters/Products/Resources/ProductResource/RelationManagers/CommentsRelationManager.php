@@ -47,8 +47,6 @@ class CommentsRelationManager extends RelationManager
                 TextEntry::make('title'),
                 TextEntry::make('user.name')
                     ->label('Customer'),
-                IconEntry::make('is_visible')
-                    ->label('Visibility'),
                 TextEntry::make('rating')
                     ->label('Rating'),
                 TextEntry::make('content')
