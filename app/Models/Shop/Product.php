@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use App\Models\Shop\Promotion;
 
 class Product extends Model implements HasMedia
 {
@@ -87,6 +88,45 @@ class Product extends Model implements HasMedia
             ->latest();
     }
 
+    /**
+     * The promotions that the product is part of.
+     */
+    public function promotions(): BelongsToMany
+    {
+        return $this->belongsToMany(Promotion::class, 'product_promotion')->withTimestamps();
+    }
+
+    public function activePromotions()
+    {
+        return $this->promotions()
+            ->where('start_date', '<=', now())
+            ->where('end_date', '>=', now());
+    }
+
+    /**
+     * Accessors for Promotions
+     */
+    public function getHasActivePromotionAttribute()
+    {
+        return $this->activePromotions()->exists();
+    }
+
+    public function getActivePromotionPercentageAttribute()
+    {
+        $activePromotion = $this->activePromotions()->orderBy('discount_percentage', 'desc')->first();
+        return $activePromotion ? $activePromotion->discount_percentage : null;
+    }
+
+    /**
+     * Calculate Effective Discount
+     */
+    public function getEffectiveDiscountAttribute()
+    {
+        $discount = $this->has_active_discount ? $this->active_discount_percentage : 0;
+        $promotion = $this->has_active_promotion ? $this->active_promotion_percentage : 0;
+
+        return max($discount, $promotion);
+    }
 
     /**
      * Get the current price after applying any active discount
@@ -95,10 +135,10 @@ class Product extends Model implements HasMedia
      */
     public function getDiscountedPriceAttribute()
     {
-        $activeDiscount = $this->activeDiscount;
+        $effectiveDiscount = $this->effective_discount;
 
-        if ($activeDiscount) {
-            $discountAmount = ($this->price * $activeDiscount->discount_percentage) / 100;
+        if ($effectiveDiscount > 0) {
+            $discountAmount = ($this->price * $effectiveDiscount) / 100;
             return $this->price - $discountAmount;
         }
 
@@ -123,5 +163,13 @@ class Product extends Model implements HasMedia
     public function getActiveDiscountPercentageAttribute()
     {
         return $this->activeDiscount?->discount_percentage;
+    }
+
+    /**
+     * Check for Active Discount or Promotion
+     */
+    public function getHasActiveDiscountOrPromotionAttribute()
+    {
+        return $this->has_active_discount || $this->has_active_promotion;
     }
 }
