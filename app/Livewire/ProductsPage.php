@@ -48,7 +48,7 @@ class ProductsPage extends Component
     {
         $total_count = CartManagement::addItemToCart($product_id);
 
-        $this->dispatch('update-cart-count', total_count: $total_count)->to(Navbar::class);
+        $this->dispatch('update-cart-count', ['total_count' => $total_count])->to(Navbar::class);
 
         $this->alert('success', 'Product added to the cart successfully!', [
             'position' => 'bottom-end',
@@ -85,20 +85,25 @@ class ProductsPage extends Component
             $productsQuery->whereBetween('price', [0, $this->price_range]);
         }
 
-        if ($this->sort == 'latest') {
-            $productsQuery->orderBy('published_at', 'desc');
-        } elseif ($this->sort == 'price_asc') {
-            $productsQuery->orderBy('price', 'asc');
-        } elseif ($this->sort == 'price_desc') {
-            $productsQuery->orderBy('price', 'desc');
+        // Apply sorting
+        switch ($this->sort) {
+            case 'price_asc':
+                $productsQuery->orderBy('price', 'asc');
+                break;
+            case 'price_desc':
+                $productsQuery->orderBy('price', 'desc');
+                break;
+            default:
+                $productsQuery->latest();
+                break;
         }
 
-        $products = $productsQuery->paginate(12);
+        $products = $productsQuery->with(['media'])->paginate(12);
 
         return view('livewire.products-page', [
-            'products' => $products,
             'sellers' => $sellers,
             'categories' => $categories,
+            'products' => $products,
         ]);
     }
 }

@@ -27,7 +27,7 @@ class CartManagement
             $cart_items[$existing_item]['quantity'] += $quantity;
             $cart_items[$existing_item]['total_amount'] = $cart_items[$existing_item]['quantity'] * $cart_items[$existing_item]['unit_amount'];
         } else {
-            $product = Product::where('id', $product_id)->first(['id', 'name', 'price']);
+            $product = Product::find($product_id, ['id', 'name', 'price']);
 
             if ($product) {
                 $price = $product->discounted_price;
