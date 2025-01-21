@@ -3,6 +3,7 @@
 namespace App\Filament\Seller\Resources\Shop;
 
 use App\Enums\OrderStatus;
+use App\Filament\Admin\Resources\Shop\OrderResource\Exports\OrderExporter;
 use App\Filament\Seller\Resources\Shop\OrderResource\Pages;
 use App\Filament\Seller\Resources\Shop\OrderResource\RelationManagers;
 use App\Filament\Seller\Resources\Shop\OrderResource\Widgets\OrderStats;

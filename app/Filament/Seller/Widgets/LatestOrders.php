@@ -2,6 +2,7 @@
 
 namespace App\Filament\Seller\Widgets;
 
+use App\Filament\Admin\Resources\Shop\OrderResource\Exports\OrderExporter;
 use App\Filament\Seller\Resources\Shop\OrderResource;
 use App\Models\Shop\Order;
 use Filament\Tables;

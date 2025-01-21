@@ -4,6 +4,7 @@ namespace App\Models\Shop;
 
 use App\Enums\OrderStatus;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -39,6 +40,8 @@ class Order extends Model
 
     protected $casts = [
         'status' => OrderStatus::class,
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     protected static function boot()
@@ -78,5 +81,12 @@ class Order extends Model
     public function customer(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    // In your Order model
+    public function scopeDateRange($query, $startDate, $endDate)
+    {
+        return $query->where('created_at', '>=', $startDate)
+            ->where('created_at', '<=', $endDate);
     }
 }

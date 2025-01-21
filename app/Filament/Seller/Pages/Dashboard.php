@@ -2,6 +2,8 @@
 
 namespace App\Filament\Seller\Pages;
 
+use App\Filament\Seller\Exports\Shop\OrderExporter;
+use Filament\Actions\ExportAction;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
@@ -12,6 +14,13 @@ use Filament\Pages\Dashboard as BaseDashboard;
 class Dashboard extends BaseDashboard
 {
     use BaseDashboard\Concerns\HasFiltersForm;
+
+    public function getHeaderActions(): array
+    {
+        return [
+            ExportAction::make()->exporter(OrderExporter::class),
+        ];
+    }
 
     public function filtersForm(Form $form): Form
     {

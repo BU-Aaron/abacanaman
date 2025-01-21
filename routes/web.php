@@ -23,6 +23,7 @@ use App\Livewire\SellerPage;
 use App\Livewire\SuccessPage;
 use App\Livewire\BuyerProfilePage;
 use App\Livewire\AboutPage;
+use Filament\Actions\Exports\Http\Controllers\DownloadExport;
 use Filament\Facades\Filament;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -96,3 +97,11 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
 Route::get('/about', AboutPage::class)->name('about');
+
+Route::get('admin/filament/exports/{export}/download', DownloadExport::class)
+    ->name('filament.exports.download')
+    ->middleware(['web', 'auth:admin']);
+
+// Route::get('seller/filament/exports/{export}/download', DownloadExport::class)
+//     ->name('filament.exports.download')
+//     ->middleware(['web', 'auth:seller']);
