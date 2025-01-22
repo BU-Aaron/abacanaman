@@ -13,9 +13,13 @@ class CartManagement
     static public function addItemToCart($product_id, $quantity = 1)
     {
         $cart_items = self::getCartItemsFromCookie();
+        $product = Product::find($product_id, ['id', 'name', 'price', 'qty']);
+
+        if (!$product || $product->qty <= 0) {
+            throw new \Exception('Product is out of stock');
+        }
 
         $existing_item = null;
-
         foreach ($cart_items as $key => $item) {
             if ($item['product_id'] == $product_id) {
                 $existing_item = $key;
@@ -24,22 +28,26 @@ class CartManagement
         }
 
         if ($existing_item !== null) {
-            $cart_items[$existing_item]['quantity'] += $quantity;
-            $cart_items[$existing_item]['total_amount'] = $cart_items[$existing_item]['quantity'] * $cart_items[$existing_item]['unit_amount'];
-        } else {
-            $product = Product::find($product_id, ['id', 'name', 'price']);
-
-            if ($product) {
-                $price = $product->discounted_price;
-                $cart_items[] = [
-                    'product_id'    => $product->id,
-                    'product_name'  => $product->name,
-                    'image'         => $product->getFirstMediaUrl('product-images') ?: 'path/to/default/image.jpg',
-                    'quantity'      => $quantity,
-                    'unit_amount'   => $price,
-                    'total_amount'  => $price * $quantity
-                ];
+            $new_quantity = $cart_items[$existing_item]['quantity'] + $quantity;
+            if ($new_quantity > $product->qty) {
+                throw new \Exception('Not enough stock available');
             }
+            $cart_items[$existing_item]['quantity'] = $new_quantity;
+            $cart_items[$existing_item]['total_amount'] = $new_quantity * $cart_items[$existing_item]['unit_amount'];
+        } else {
+            if ($quantity > $product->qty) {
+                throw new \Exception('Not enough stock available');
+            }
+
+            $price = $product->discounted_price;
+            $cart_items[] = [
+                'product_id' => $product->id,
+                'product_name' => $product->name,
+                'image' => $product->getFirstMediaUrl('product-images') ?: 'path/to/default/image.jpg',
+                'quantity' => $quantity,
+                'unit_amount' => $price,
+                'total_amount' => $price * $quantity
+            ];
         }
 
         self::addCartItemsToCookie($cart_items);

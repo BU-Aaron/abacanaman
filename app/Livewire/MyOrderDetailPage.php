@@ -31,7 +31,15 @@ class MyOrderDetailPage extends Component
         $order->status = 'delivered';
         $order->save();
 
-        $this->alert('success', 'Order has been marked as delivered.');
+        $this->alert(
+            'success',
+            'Order has been marked as delivered.',
+            [
+                'position' => 'top',
+                'timer' => 3000,
+                'toast' => true,
+            ]
+        );
     }
 
     public function cancelOrder()
@@ -39,14 +47,30 @@ class MyOrderDetailPage extends Component
         $order = $this->getOrder();
 
         if (in_array($order->status->value, ['delivered', 'cancelled'])) {
-            $this->alert('error', 'Order cannot be cancelled.');
+            $this->alert(
+                'error',
+                'Order cannot be cancelled.',
+                [
+                    'position' => 'top',
+                    'timer' => 3000,
+                    'toast' => true,
+                ]
+            );
             return;
         }
 
         $order->status = 'cancelled';
         $order->save();
 
-        $this->alert('success', 'Order has been cancelled.');
+        $this->alert(
+            'success',
+            'Order has been cancelled.',
+            [
+                'position' => 'top',
+                'timer' => 3000,
+                'toast' => true,
+            ]
+        );
     }
 
     private function getOrder()

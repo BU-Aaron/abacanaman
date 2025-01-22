@@ -55,7 +55,7 @@ class ProductDetailPage extends Component
         $this->dispatch('update-cart-count', total_count: $total_count)->to(Navbar::class);
 
         $this->alert('success', 'Product added to the cart successfully!', [
-            'position' => 'bottom-end',
+            'position' => 'top',
             'timer' => 3000,
             'toast' => true,
         ]);
@@ -79,7 +79,7 @@ class ProductDetailPage extends Component
         $this->reset(['rating', 'comment']);
 
         $this->alert('success', 'Your review has been submitted and is pending approval.', [
-            'position' => 'bottom-end',
+            'position' => 'top',
             'timer' => 3000,
             'toast' => true,
         ]);

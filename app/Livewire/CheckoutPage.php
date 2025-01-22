@@ -9,6 +9,7 @@ use App\Mail\OrderPlaced;
 use App\Models\Shop\Order;
 use App\Models\Shop\OrderAddress;
 use App\Models\Shop\Payment;
+use App\Models\Shop\Product;
 use App\Models\User;
 use Filament\Notifications\Actions\Action;
 use Filament\Notifications\Notification;
@@ -104,6 +105,17 @@ class CheckoutPage extends Component
         $order->address()->save($orderAddress);
 
         foreach ($cart_items as $item) {
+            $product = Product::find($item['product_id']);
+
+            // Check if enough quantity is available
+            if ($product->qty < $item['quantity']) {
+                $this->alert('error', "Not enough stock available for {$product->name}");
+                return;
+            }
+
+            // Deduct quantity from product
+            $product->decrement('qty', $item['quantity']);
+
             $order->items()->create([
                 'shop_product_id' => $item['product_id'],
                 'qty' => $item['quantity'],

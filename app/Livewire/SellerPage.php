@@ -33,7 +33,7 @@ class SellerPage extends Component
         $this->dispatch('update-cart-count', total_count: $total_count)->to(Navbar::class);
 
         $this->alert('success', 'Product added to the cart successfully!', [
-            'position' => 'bottom-end',
+            'position' => 'top',
             'timer' => 3000,
             'toast' => true,
         ]);
