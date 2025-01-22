@@ -40,6 +40,9 @@ class RegisterPage extends Component
             'password' => Hash::make($this->password),
             'role' => User::ROLE_BUYER,
             'phone_number' => $this->phone_number,
+        ]);
+
+        $user->addresses()->create([
             'address' => $this->address,
             'city' => $this->city,
             'state' => $this->state,
