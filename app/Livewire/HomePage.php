@@ -6,6 +6,7 @@ use App\Models\Shop\Seller;
 use App\Models\Shop\Category;
 use App\Models\Comment;
 use App\Models\Shop\Product;
+use App\Models\Shop\Promotion;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
@@ -16,6 +17,7 @@ class HomePage extends Component
     public $sellers;
     public $categories;
     public $recentComments;
+    public $randomPromotion;
 
     public function render()
     {
@@ -33,10 +35,22 @@ class HomePage extends Component
             ->take(5)
             ->get();
 
+        // Fetch a random active promotion with its products
+        $this->randomPromotion = Promotion::where('start_date', '<=', now())
+            ->where('end_date', '>=', now())
+            ->with(['products' => function ($query) {
+                $query->where('is_visible', true)
+                    ->with('media')
+                    ->take(4);
+            }])
+            ->inRandomOrder()
+            ->first();
+
         return view('livewire.home-page', [
             'sellers' => $this->sellers,
             'categories' => $this->categories,
             'recentComments' => $this->recentComments,
+            'randomPromotion' => $this->randomPromotion,
         ]);
     }
 }
