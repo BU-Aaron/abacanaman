@@ -98,10 +98,10 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
 
 Route::get('/about', AboutPage::class)->name('about');
 
-Route::get('admin/filament/exports/{export}/download', DownloadExport::class)
+Route::get('filament/exports/{export}/download', DownloadExport::class)
     ->name('filament.exports.download')
     ->middleware(['web', 'auth:admin']);
 
-// Route::get('seller/filament/exports/{export}/download', DownloadExport::class)
-//     ->name('filament.exports.download')
-//     ->middleware(['web', 'auth:seller']);
+Route::get('filament/exports/{export}/download', DownloadExport::class)
+    ->name('filament.exports.download')
+    ->middleware(['web', 'auth:seller']);

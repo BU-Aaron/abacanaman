@@ -46,7 +46,7 @@
                     <h1 class="text-5xl font-bold dark:text-gray-200">
                         {{ $randomPromotion->name }}
                         <span class="text-amber-500">
-                            {{ $randomPromotion->discount_percentage }}% OFF
+                            {{ number_format($randomPromotion->discount_percentage, 0) }}% OFF
                         </span>
                     </h1>
                     <div class="flex w-40 mt-2 mb-6 overflow-hidden rounded">

@@ -16,9 +16,9 @@ class RegisterPage extends Component
     public $password;
     public $password_confirmation;
     public $phone_number;
-    public $address;
+    public $street_address;
     public $city;
-    public $state;
+    public $province;
     public $zip_code;
 
     public function save()
@@ -28,9 +28,9 @@ class RegisterPage extends Component
             'email' => 'required|email|unique:users|max:255',
             'password' => 'required|string|min:8|max:255|confirmed',
             'phone_number' => 'required|string|max:20',
-            'address' => 'required|string|max:255',
+            'street_address' => 'required|string|max:255',
             'city' => 'required|string|max:100',
-            'state' => 'required|string|max:100',
+            'province' => 'required|string|max:100',
             'zip_code' => 'required|string|max:20',
         ]);
 
@@ -43,10 +43,10 @@ class RegisterPage extends Component
         ]);
 
         $user->addresses()->create([
-            'address' => $this->address,
+            'street' => $this->street_address,
             'city' => $this->city,
-            'state' => $this->state,
-            'zip_code' => $this->zip_code,
+            'state' => $this->province,
+            'zip' => $this->zip_code,
         ]);
 
         Auth::login($user);
