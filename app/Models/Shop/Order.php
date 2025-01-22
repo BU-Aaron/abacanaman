@@ -86,7 +86,19 @@ class Order extends Model
     // In your Order model
     public function scopeDateRange($query, $startDate, $endDate)
     {
-        return $query->where('created_at', '>=', $startDate)
-            ->where('created_at', '<=', $endDate);
+        if ($startDate && $endDate) {
+            return $query->where('created_at', '>=', $startDate)
+                ->where('created_at', '<=', $endDate);
+        }
+
+        if ($startDate) {
+            return $query->where('created_at', '>=', $startDate);
+        }
+
+        if ($endDate) {
+            return $query->where('created_at', '<=', $endDate);
+        }
+
+        return $query;
     }
 }
