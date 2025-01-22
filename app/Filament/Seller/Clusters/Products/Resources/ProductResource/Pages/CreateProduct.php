@@ -54,4 +54,12 @@ class CreateProduct extends CreateRecord
                 ->sendToDatabase($admin);
         }
     }
+
+    protected function getFormActions(): array
+    {
+        return [
+            $this->getCreateFormAction(),
+            $this->getCancelFormAction()
+        ];
+    }
 }
