@@ -12,21 +12,8 @@ class DiscountCalendar extends Component
 
     public function mount()
     {
-        // Fetch active and verified discounts
-        $discounts = Discount::with('product')->where('is_verified', true)->get();
-
         // Fetch active promotions
         $promotions = Promotion::with('products')->get();
-
-        // Map discounts to calendar events
-        $discountEvents = $discounts->map(function ($discount) {
-            return [
-                'title' => "{$discount->product->name} - {$discount->discount_percentage}% Off (Discount)",
-                'start' => $discount->start_date,
-                'end' => $discount->end_date, // FullCalendar treats 'end' as exclusive
-                'url' => route('product-details', $discount->product->slug),
-            ];
-        });
 
         // Map promotions to calendar events
         $promotionEvents = $promotions->flatMap(function ($promotion) {
@@ -40,8 +27,7 @@ class DiscountCalendar extends Component
             });
         });
 
-        // Merge both discount and promotion events
-        $this->events = $discountEvents->merge($promotionEvents)->toArray();
+        $this->events = $promotionEvents->toArray();
     }
 
     public function render()
