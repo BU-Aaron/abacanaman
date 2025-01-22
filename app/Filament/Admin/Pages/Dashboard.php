@@ -52,6 +52,7 @@ class Dashboard extends BaseDashboard
             ExportAction::make()
                 ->exporter(OrderExporter::class)
                 ->modifyQueryUsing(fn(Builder $query) => $query->dateRange($this->startDate, Carbon::parse($this->endDate)->addDay()))
+                ->columnMapping(false)
         ];
     }
 }

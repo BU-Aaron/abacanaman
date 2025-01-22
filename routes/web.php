@@ -101,7 +101,3 @@ Route::get('/about', AboutPage::class)->name('about');
 Route::get('filament/exports/{export}/download', DownloadExport::class)
     ->name('filament.exports.download')
     ->middleware(['web', 'auth:admin']);
-
-Route::get('filament/exports/{export}/download', DownloadExport::class)
-    ->name('filament.exports.download')
-    ->middleware(['web', 'auth:seller']);

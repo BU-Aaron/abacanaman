@@ -17,11 +17,13 @@ class Dashboard extends BaseDashboard
 {
     use BaseDashboard\Concerns\HasFiltersForm;
 
-    public function getHeaderActions(): array
+    public $startDate;
+    public $endDate;
+
+    public function mount()
     {
-        return [
-            ExportAction::make()->exporter(OrderExporter::class),
-        ];
+        $this->startDate = data_get(request()->query('filters'), 'startDate', null);
+        $this->endDate = data_get(request()->query('filters'), 'endDate', null);
     }
 
     public function filtersForm(Form $form): Form
@@ -31,13 +33,17 @@ class Dashboard extends BaseDashboard
                 Section::make()
                     ->schema([
                         DatePicker::make('startDate')
-                            ->maxDate(fn(Get $get) => $get('endDate') ?: now()),
+                            ->maxDate(fn(Get $get) => $get('endDate') ?: now())
+                            ->reactive()
+                            ->afterStateUpdated(fn($state) => $this->startDate = $state),
                         DatePicker::make('endDate')
                             ->minDate(fn(Get $get) => $get('startDate') ?: now())
-                            ->maxDate(now()),
+                            ->maxDate(now())
+                            ->reactive()
+                            ->afterStateUpdated(fn($state) => $this->endDate = $state),
                     ])
                     ->columns(2),
-            ]);
+            ])->reactive(true);
     }
 
     public function getActions(): array
@@ -46,6 +52,7 @@ class Dashboard extends BaseDashboard
             ExportAction::make()
                 ->exporter(OrderExporter::class)
                 ->modifyQueryUsing(fn(Builder $query) => $query->dateRange($this->startDate, Carbon::parse($this->endDate)->addDay()))
+                ->columnMapping(false)
         ];
     }
 }
