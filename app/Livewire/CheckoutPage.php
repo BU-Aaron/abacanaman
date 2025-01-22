@@ -23,49 +23,27 @@ class CheckoutPage extends Component
 {
     use WithFileUploads;
 
-    public $first_name;
-    public $last_name;
-    public $phone;
-    public $street_address;
-    public $city;
-    public $state;
-    public $zip_code;
+    public $selected_address_id;
+    public $addresses;
     public $payment_method = 'cod';
-
     public $gcash_reference;
     public $gcash_receipt;
 
     public function mount()
     {
         $user = Auth::user();
+        $this->addresses = $user->addresses()->get();
 
-        if ($user) {
-            // Split the user's name into first and last names
-            $nameParts = explode(' ', $user->name, 2);
-            $this->first_name = $nameParts[0] ?? '';
-            $this->last_name = $nameParts[1] ?? '';
-
-            $this->phone = $user->phone_number;
-            $this->street_address = $user->address;
-            $this->city = $user->city;
-            $this->state = $user->state;
-            $this->zip_code = $user->zip_code;
+        // Select the first address by default if exists
+        if ($this->addresses->isNotEmpty()) {
+            $this->selected_address_id = $this->addresses->first()->id;
         }
-
-        $cart_items = CartManagement::getCartItemsFromCookie();
-        // You can also initialize other properties if needed
     }
 
     public function placeOrder()
     {
         $rules = [
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'phone' => 'required',
-            'street_address' => 'required',
-            'city' => 'required',
-            'state' => 'required',
-            'zip_code' => 'required',
+            'selected_address_id' => 'required|exists:addresses,id',
             'payment_method' => 'required',
         ];
 
@@ -75,6 +53,9 @@ class CheckoutPage extends Component
         }
 
         $this->validate($rules);
+
+        $user = Auth::user();
+        $selectedAddress = $this->addresses->find($this->selected_address_id);
 
         $cart_items = CartManagement::getCartItemsFromCookie();
 
@@ -99,7 +80,7 @@ class CheckoutPage extends Component
 
         $order = Order::create([
             'number' => $orderNumber,
-            'user_id' => Auth::id(),
+            'user_id' => $user->id,
             'currency' => 'php',
             'payment_method' => $this->payment_method,
             'payment_status' => $this->payment_method === 'gcash' ? 'paid' : 'pending',
@@ -107,17 +88,17 @@ class CheckoutPage extends Component
             'status' => 'new',
             'shipping_method' => 'pickup',
             'shipping_price' => 0,
-            'notes' => 'Order created by ' . Auth::user()->name,
+            'notes' => 'Order created by ' . $user->name,
         ]);
 
         $orderAddress = new OrderAddress([
-            'first_name' => $this->first_name,
-            'last_name' => $this->last_name,
-            'phone' => $this->phone,
-            'street_address' => $this->street_address,
-            'city' => $this->city,
-            'state' => $this->state,
-            'zip_code' => $this->zip_code,
+            'first_name' => explode(' ', $user->name)[0] ?? '',
+            'last_name' => explode(' ', $user->name)[1] ?? '',
+            'phone' => $user->phone_number,
+            'street_address' => $selectedAddress->address,
+            'city' => $selectedAddress->city,
+            'state' => $selectedAddress->state,
+            'zip_code' => $selectedAddress->zip_code,
         ]);
 
         $order->address()->save($orderAddress);
@@ -148,25 +129,13 @@ class CheckoutPage extends Component
             $redirect_url = route('success');
         }
 
-        // $admins = User::where('role', User::ROLE_ADMIN)->get();
-
-        // foreach ($admins as $admin) {
-        //     // Send notification to each admin
-        //     Notification::make()
-        //         ->title('New Order Received')
-        //         ->icon('heroicon-o-shopping-bag')
-        //         ->body("{$order->user->name} has placed a new order (#{$order->number}) containing {$order->items->count()} items.")
-        //         ->actions([
-        //             Action::make('View')
-        //                 ->url(OrderResource::getUrl('edit', ['record' => $order])),
-        //         ])
-        //         ->sendToDatabase($admin);
-        // }
-
         // Collect unique sellers from the order items
         $sellers = $order->items->map(function ($item) {
             return $item->product->seller;
         })->unique('id');
+
+
+        // Send notification to each seller
 
         foreach ($sellers as $seller) {
             $sellerUser = $seller->user;
