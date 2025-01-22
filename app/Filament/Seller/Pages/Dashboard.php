@@ -3,6 +3,7 @@
 namespace App\Filament\Seller\Pages;
 
 use App\Filament\Seller\Exports\Shop\OrderExporter;
+use Carbon\Carbon;
 use Filament\Actions\ExportAction;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Section;
@@ -10,6 +11,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Pages\Dashboard as BaseDashboard;
+use Illuminate\Database\Eloquent\Builder;
 
 class Dashboard extends BaseDashboard
 {
@@ -36,5 +38,14 @@ class Dashboard extends BaseDashboard
                     ])
                     ->columns(2),
             ]);
+    }
+
+    public function getActions(): array
+    {
+        return [
+            ExportAction::make()
+                ->exporter(OrderExporter::class)
+                ->modifyQueryUsing(fn(Builder $query) => $query->dateRange($this->startDate, Carbon::parse($this->endDate)->addDay()))
+        ];
     }
 }

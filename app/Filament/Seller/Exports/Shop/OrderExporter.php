@@ -14,15 +14,22 @@ class OrderExporter extends Exporter
     public static function getColumns(): array
     {
         return [
-            ExportColumn::make('number'),
-            ExportColumn::make('created_at'),
-            ExportColumn::make('updated_at'),
+            ExportColumn::make('date')
+                ->state(fn($record) => date('Y-m-d', strtotime($record->created_at))),
+            ExportColumn::make('number')
+                ->state(fn($record) => $record->number),
+            ExportColumn::make('customer_name')
+                ->state(fn($record) => $record->customer->name),
+            ExportColumn::make('total_orders')
+                ->state(fn($record) => 1),
+            ExportColumn::make('total_revenue')
+                ->state(fn($record) => $record->total_price),
         ];
     }
 
     public static function getCompletedNotificationBody(Export $export): string
     {
-        $body = 'Your brand export has completed and ' . number_format($export->successful_rows) . ' ' . str('row')->plural($export->successful_rows) . ' exported.';
+        $body = 'Your order export has completed and ' . number_format($export->successful_rows) . ' ' . str('row')->plural($export->successful_rows) . ' exported.';
 
         if ($failedRowsCount = $export->getFailedRowsCount()) {
             $body .= ' ' . number_format($failedRowsCount) . ' ' . str('row')->plural($failedRowsCount) . ' failed to export.';
