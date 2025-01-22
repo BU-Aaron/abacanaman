@@ -29,6 +29,7 @@ class MyOrderDetailPage extends Component
         }
 
         $order->status = 'delivered';
+        $order->payment_status = 'paid';
         $order->save();
 
         $this->alert(

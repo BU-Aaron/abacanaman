@@ -189,7 +189,15 @@
                     </p>
                 </div>
                 <div class="flex items-center mt-1 gap-x-2">
-                    <span class="px-3 py-1 text-white bg-green-500 rounded shadow">Paid</span>
+                    @php
+                    $paymentStatusBadge = match($order->payment_status) {
+                    'paid' => '<span class="px-3 py-1 text-white bg-green-500 rounded shadow">Paid</span>',
+                    'pending' => '<span class="px-3 py-1 text-white rounded shadow bg-amber-500">Pending</span>',
+                    'failed' => '<span class="px-3 py-1 text-white bg-red-500 rounded shadow">Failed</span>',
+                    default => '<span class="px-3 py-1 text-white bg-gray-500 rounded shadow">Unknown</span>'
+                    };
+                    @endphp
+                    {!! $paymentStatusBadge !!}
                 </div>
             </div>
         </div>
